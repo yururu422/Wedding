@@ -858,10 +858,14 @@ setInterval(tick,1000); tick();
   const track = document.getElementById('g-track');
   const dotsEl = document.getElementById('g-dots');
 
-  track.innerHTML = imgs.map((src,i) =>
-    `<div class="g-item"><img src="${src}" alt="갤러리 ${i+1}"
-      onerror="this.parentNode.innerHTML='<div class=\\'g-ph\\'><div class=\\'ico\\'>🖼️</div></div>'"></div>`
-  ).join('');
+  const rots = JSON.parse(localStorage.getItem('photo_rotations')||'{}');
+  track.innerHTML = imgs.map((src,i) => {
+    const name = src.split('/').pop();
+    const deg  = rots[name] || 0;
+    return `<div class="g-item"><img src="${src}" alt="갤러리 ${i+1}"
+      style="transform:rotate(${deg}deg)"
+      onerror="this.parentNode.innerHTML='<div class=\\'g-ph\\'><div class=\\'ico\\'>🖼️</div></div>'"></div>`;
+  }).join('');
 
   dotsEl.innerHTML = imgs.map((_,i) =>
     `<div class="g-dot${i===0?' on':''}"></div>`
