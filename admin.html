@@ -188,7 +188,7 @@
       <button class="tab" onclick="switchTab('contact',this)">📞 연락처</button>
       <button class="tab" onclick="switchTab('account',this)">🏦 계좌</button>
       <button class="tab" onclick="switchTab('theme',this)">🎨 테마</button>
-      <button class="tab" onclick="switchTab('rsvp',this)">✉️ 참석여부</button>
+      <button class="tab" onclick="switchTab('rsvp',this)">🚌 대절버스</button>
       <button class="tab" onclick="switchTab('guestbook',this)">💌 방명록</button>
       <button class="tab" onclick="switchTab('settings',this)">⚙️ 설정</button>
     </div>
@@ -363,16 +363,16 @@
       </div>
     </div>
 
-    <!-- ── RSVP ── -->
+    <!-- ── 대절버스 ── -->
     <div class="panel" id="panel-rsvp">
       <div class="stats">
         <div class="stat"><div class="stat-n" id="stat-total">0</div><div class="stat-l">총 응답</div></div>
-        <div class="stat"><div class="stat-n" id="stat-yes">0</div><div class="stat-l">참석</div></div>
-        <div class="stat"><div class="stat-n" id="stat-guests">0</div><div class="stat-l">총 인원</div></div>
+        <div class="stat"><div class="stat-n" id="stat-yes">0</div><div class="stat-l">탑승</div></div>
+        <div class="stat"><div class="stat-n" id="stat-guests">0</div><div class="stat-l">탑승 인원</div></div>
       </div>
       <div class="card">
         <div class="card-head">
-          <div><div class="card-label">RSVP</div><div class="card-title">참석 의사 목록</div></div>
+          <div><div class="card-label">대절버스</div><div class="card-title">탑승 여부 목록</div></div>
           <button class="btn btn-light" onclick="clearRsvp()" style="font-size:12px;padding:8px 14px;">전체 삭제</button>
         </div>
         <div class="rsvp-list" id="rsvp-list"></div>
@@ -949,27 +949,28 @@ function resetAccount(){ localStorage.removeItem('account_info'); renderAccountF
 function getRsvp(){ return JSON.parse(localStorage.getItem('rsvp')||'[]'); }
 function renderRsvp(){
   const list = getRsvp();
-  const yes = list.filter(r=>r.attendance==='참석');
+  const boarding = list.filter(r=>r.boarding==='탑승');
   document.getElementById('stat-total').textContent = list.length;
-  document.getElementById('stat-yes').textContent = yes.length;
-  document.getElementById('stat-guests').textContent = yes.reduce((s,r)=>s+(r.guest_count||1),0);
+  document.getElementById('stat-yes').textContent = boarding.length;
+  document.getElementById('stat-guests').textContent = boarding.reduce((s,r)=>s+(r.board_count||1),0);
   const el = document.getElementById('rsvp-list');
   if(!list.length){ el.innerHTML='<div class="empty">아직 응답이 없습니다</div>'; return; }
   el.innerHTML = [...list].reverse().map((r,i)=>{
     const ri = list.length-1-i;
     const d = r.created_at ? new Date(r.created_at).toLocaleDateString('ko-KR') : '';
+    const isBoarding = (r.boarding||r.attendance)==='탑승'||(r.boarding||r.attendance)==='참석';
+    const boardingLabel = r.boarding || (r.attendance==='참석'?'탑승':'미탑승');
     return `<div class="rsvp-item">
-      <div class="r-name">${esc(r.name)}<span class="att ${r.attendance==='참석'?'y':'n'}">${r.attendance||'참석'}</span><span style="font-size:11px;color:var(--muted);">${r.side||''}</span></div>
-      <div class="r-meta">👥 인원 <b>${r.guest_count||1}명</b></div>
-      <div class="r-meta">🍽 식사 <b>${r.meal_preference||'미정'}</b></div>
-      ${r.companion?`<div class="r-meta" style="grid-column:1/-1">👤 동행 <b>${esc(r.companion)}</b></div>`:''}
+      <div class="r-name">${esc(r.name)}<span class="att ${isBoarding?'y':'n'}">${boardingLabel}</span><span style="font-size:11px;color:var(--muted);">${r.side||''}</span></div>
+      ${isBoarding?`<div class="r-meta">🚌 탑승인원 <b>${r.board_count||r.guest_count||1}명</b></div>`:''}
+      ${r.phone?`<div class="r-meta">📞 <b>${esc(r.phone)}</b></div>`:''}
       ${d?`<div class="r-meta" style="grid-column:1/-1;color:#bbb;">${d}</div>`:''}
       <button class="r-del" onclick="delRsvp(${ri})">삭제</button>
     </div>`;
   }).join('');
 }
 function delRsvp(i){ const l=getRsvp(); l.splice(i,1); localStorage.setItem('rsvp',JSON.stringify(l)); renderRsvp(); toast('삭제되었습니다'); }
-function clearRsvp(){ if(!confirm('RSVP 전체를 삭제할까요?')) return; localStorage.removeItem('rsvp'); renderRsvp(); toast('전체 삭제됨'); }
+function clearRsvp(){ if(!confirm('대절버스 탑승 데이터를 전체 삭제할까요?')) return; localStorage.removeItem('rsvp'); renderRsvp(); toast('전체 삭제됨'); }
 
 /* ══════════════════════════════════════════
    GUESTBOOK

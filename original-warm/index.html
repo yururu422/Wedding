@@ -662,22 +662,23 @@ section.visible{opacity:1;transform:translateY(0);}
 
 <div class="divider">✦</div>
 
-<!-- ════════ 9. RSVP ════════ -->
+<!-- ════════ 9. 대절버스 ════════ -->
 <section id="rsvp">
-  <p class="sec-title">RSVP</p>
-  <h2 class="sec-title-kr">참석 여부</h2>
-  <p style="font-size:13px;color:var(--muted);margin-bottom:24px;word-break:keep-all;">
-    참석 여부를 미리 알려주시면 준비에 큰 도움이 됩니다 ✦
+  <p class="sec-title">Shuttle Bus</p>
+  <h2 class="sec-title-kr">대절버스 탑승 안내</h2>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:24px;word-break:keep-all;line-height:2;">
+    결혼식 당일 대절버스를 운행합니다.<br>
+    탑승 여부를 미리 알려주시면 감사하겠습니다 ✦
   </p>
-  <button class="rsvp-btn" onclick="openModal('m-rsvp')">✉️ 참석 의사 전달하기</button>
+  <button class="rsvp-btn" onclick="openModal('m-rsvp')">🚌 탑승 여부 알리기</button>
 </section>
 
-<!-- RSVP Modal -->
+<!-- 대절버스 Modal -->
 <div class="overlay" id="m-rsvp" onclick="bgClose(event,'m-rsvp')">
   <div class="sheet">
     <div class="handle"></div>
     <button class="modal-x" onclick="closeModal('m-rsvp')">✕</button>
-    <div class="rsvp-title">✦ 참석 의사 전달 ✦</div>
+    <div class="rsvp-title">🚌 대절버스 탑승 여부</div>
     <form id="rsvp-form" onsubmit="submitRsvp(event)">
       <div class="rf">
         <div class="rf-lbl">구분</div>
@@ -691,34 +692,22 @@ section.visible{opacity:1;transform:translateY(0);}
         <input class="rf-inp" type="text" id="rv-name" placeholder="성함을 입력해주세요" required>
       </div>
       <div class="rf">
-        <div class="rf-lbl">참석 여부</div>
+        <div class="rf-lbl">탑승 여부</div>
         <div class="rdo-group">
-          <div class="rdo on" data-g="att" data-v="참석" onclick="pickRdo(this)">참석</div>
-          <div class="rdo" data-g="att" data-v="불참석" onclick="pickRdo(this)">불참석</div>
+          <div class="rdo on" data-g="att" data-v="탑승" onclick="pickRdo(this)">탑승</div>
+          <div class="rdo" data-g="att" data-v="미탑승" onclick="pickRdo(this)">미탑승</div>
         </div>
       </div>
-      <div class="rf">
-        <div class="rf-lbl">참석 인원</div>
-        <input class="rf-inp" type="number" id="rv-cnt" placeholder="본인 포함 총 참석인원" min="1" max="20">
+      <div class="rf" id="rf-cnt">
+        <div class="rf-lbl">탑승 인원</div>
+        <input class="rf-inp" type="number" id="rv-cnt" placeholder="본인 포함 총 탑승 인원" min="1" max="20">
       </div>
       <div class="rf">
-        <div class="rf-lbl">동행인</div>
-        <input class="rf-inp" type="text" id="rv-comp" placeholder="함께 오시는 분 성함">
+        <div class="rf-lbl">연락처</div>
+        <input class="rf-inp" type="tel" id="rv-phone" placeholder="010-0000-0000">
       </div>
-      <div class="rf">
-        <div class="rf-lbl">식사 여부</div>
-        <div class="rdo-group">
-          <div class="rdo on" data-g="meal" data-v="예정" onclick="pickRdo(this)">예정</div>
-          <div class="rdo" data-g="meal" data-v="안함" onclick="pickRdo(this)">안함</div>
-          <div class="rdo" data-g="meal" data-v="미정" onclick="pickRdo(this)">미정</div>
-        </div>
-      </div>
-      <button type="submit" class="rsvp-sub">✉️ 참석 의사 전달하기</button>
+      <button type="submit" class="rsvp-sub">🚌 탑승 여부 전달하기</button>
     </form>
-    <div class="no-show">
-      <input type="checkbox" id="no-show">
-      <label for="no-show">오늘 하루 보지 않기</label>
-    </div>
   </div>
 </div>
 
@@ -911,46 +900,41 @@ function pickRdo(el){
   el.classList.add('on');
 }
 
+// 탑승 여부에 따라 탑승 인원 필드 표시/숨김
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('.rdo[data-g="att"]').forEach(function(el){
+    el.addEventListener('click', function(){
+      const rfCnt = document.getElementById('rf-cnt');
+      if(rfCnt) rfCnt.style.display = el.dataset.v === '탑승' ? '' : 'none';
+    });
+  });
+});
+
 async function submitRsvp(e){
   e.preventDefault();
   const name=document.getElementById('rv-name').value.trim();
   if(!name){toast('성함을 입력해주세요');return;}
+  const boarding = document.querySelector('.rdo.on[data-g="att"]')?.dataset.v||'탑승';
   const data={
     name,
-    side:      document.querySelector('.tog.on[data-g="side"]')?.dataset.v||'신랑측',
-    attendance:document.querySelector('.rdo.on[data-g="att"]')?.dataset.v||'참석',
-    guest_count:parseInt(document.getElementById('rv-cnt').value)||1,
-    companion: document.getElementById('rv-comp').value.trim(),
-    meal_preference:document.querySelector('.rdo.on[data-g="meal"]')?.dataset.v||'예정'
+    side:    document.querySelector('.tog.on[data-g="side"]')?.dataset.v||'신랑측',
+    boarding,
+    board_count: boarding==='탑승' ? (parseInt(document.getElementById('rv-cnt').value)||1) : 0,
+    phone:   document.getElementById('rv-phone').value.trim()
   };
-  if(sb){
-    const{error}=await sb.from('rsvp_submissions').insert(data);
-    if(error){toast('저장 중 오류가 발생했습니다');console.error(error);return;}
-  } else {
-    const list=JSON.parse(localStorage.getItem('rsvp')||'[]');
-    list.push({...data,created_at:new Date().toISOString()});
-    localStorage.setItem('rsvp',JSON.stringify(list));
-  }
-  toast('참석 의사가 전달되었습니다 💌');
+  const list=JSON.parse(localStorage.getItem('rsvp')||'[]');
+  list.push({...data,created_at:new Date().toISOString()});
+  localStorage.setItem('rsvp',JSON.stringify(list));
+  toast('탑승 여부가 전달되었습니다 🚌');
   closeModal('m-rsvp');
   document.getElementById('rsvp-form').reset();
-  // reset UI
   document.querySelector('.tog[data-v="신랑측"]').classList.add('on');
   document.querySelector('.tog[data-v="신부측"]').classList.remove('on');
+  document.querySelector('.rdo[data-v="탑승"]').classList.add('on');
+  document.querySelector('.rdo[data-v="미탑승"]').classList.remove('on');
+  const rfCnt = document.getElementById('rf-cnt');
+  if(rfCnt) rfCnt.style.display = '';
 }
-
-// 자동 팝업 (2초 후, 하루 한번)
-(function(){
-  const KEY='rsvp_dismissed';
-  const today=new Date().toDateString();
-  if(localStorage.getItem(KEY)===today) return;
-  setTimeout(()=>{
-    openModal('m-rsvp');
-    document.getElementById('no-show').addEventListener('change',function(){
-      if(this.checked) localStorage.setItem(KEY,today);
-    });
-  },2000);
-})();
 
 /* ════════════════════════════════════════════
    GUESTBOOK
