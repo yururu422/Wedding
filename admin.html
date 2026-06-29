@@ -125,6 +125,12 @@
     .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(16px);background:rgba(61,48,40,.9);color:#fff;padding:10px 24px;border-radius:50px;font-size:13px;opacity:0;transition:all .3s;pointer-events:none;z-index:9999;white-space:nowrap;}
     .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
+    /* ── 기본정보 폼 ── */
+    .field-lbl{font-size:11px;color:var(--muted);letter-spacing:2px;display:block;margin-bottom:5px;font-family:var(--eng);}
+    .field-inp{width:100%;padding:10px 13px;border:1px solid var(--border);border-radius:10px;font-size:14px;font-family:var(--sans);outline:none;background:#fff;color:var(--text);transition:border .2s;}
+    .field-inp:focus{border-color:var(--accent);}
+    textarea.field-inp{resize:vertical;}
+
     /* ── 테마 그리드 ── */
     .theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
     .theme-card{border-radius:16px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all .2s;position:relative;}
@@ -178,6 +184,7 @@
   <div class="content">
     <div class="tabs">
       <button class="tab on" onclick="switchTab('gallery',this)">🖼 갤러리</button>
+      <button class="tab" onclick="switchTab('info',this)">📝 기본정보</button>
       <button class="tab" onclick="switchTab('contact',this)">📞 연락처</button>
       <button class="tab" onclick="switchTab('account',this)">🏦 계좌</button>
       <button class="tab" onclick="switchTab('theme',this)">🎨 테마</button>
@@ -237,6 +244,74 @@
           <button class="btn btn-dark" id="save-g-btn" onclick="saveGalleryOrder()">순서 저장</button>
           <button class="btn btn-light" onclick="resetGallery()">초기화</button>
         </div>
+      </div>
+    </div>
+
+    <!-- ── 기본정보 ── -->
+    <div class="panel" id="panel-info">
+
+      <div class="card">
+        <div class="card-label">Names</div>
+        <div class="card-title" style="margin-bottom:18px;">신랑 · 신부</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div><label class="field-lbl">신랑 이름</label><input class="field-inp" id="inf-groom" placeholder="권용식"></div>
+          <div><label class="field-lbl">신부 이름</label><input class="field-inp" id="inf-bride" placeholder="이유리"></div>
+          <div><label class="field-lbl">신랑 아버지</label><input class="field-inp" id="inf-gf" placeholder="권순철"></div>
+          <div><label class="field-lbl">신랑 어머니</label><input class="field-inp" id="inf-gm" placeholder="김정미"></div>
+          <div><label class="field-lbl">신부 아버지</label><input class="field-inp" id="inf-bf" placeholder="이충섭"></div>
+          <div><label class="field-lbl">신부 어머니</label><input class="field-inp" id="inf-bm" placeholder="강랑"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Wedding</div>
+        <div class="card-title" style="margin-bottom:18px;">예식 정보</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div><label class="field-lbl">날짜</label><input class="field-inp" id="inf-date" type="date" value="2026-11-28"></div>
+          <div><label class="field-lbl">시간</label><input class="field-inp" id="inf-time" type="time" value="14:30"></div>
+          <div><label class="field-lbl">예식장 이름</label><input class="field-inp" id="inf-venue" placeholder="신도림테크노마트"></div>
+          <div><label class="field-lbl">홀/층</label><input class="field-inp" id="inf-hall" placeholder="7층 웨딩홀"></div>
+        </div>
+        <div style="margin-top:12px;"><label class="field-lbl">주소</label><input class="field-inp" id="inf-addr" placeholder="서울 구로구 새말로 97" style="width:100%;"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Greeting</div>
+        <div class="card-title" style="margin-bottom:18px;">인사말</div>
+        <textarea class="field-inp" id="inf-greeting" rows="6" style="width:100%;resize:vertical;line-height:1.8;">찬바람에 코트 주머니가 자연스레 그리워지는 겨울의 초입.
+저희 두 사람, 이제 각자의 주머니가 아닌
+하나의 주머니에 손을 맞잡고 같은 길을 걸어가려 합니다.
+
+추운 날씨에도 서로만 있으면
+견딜 수 있다는 든든한 믿음으로 새 출발을 합니다.
+
+귀한 걸음 하시어 저희의 시작을
+따뜻하게 축복해 주시면 감사하겠습니다.</textarea>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Transport</div>
+        <div class="card-title" style="margin-bottom:18px;">교통 정보</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div><label class="field-lbl">🚇 지하철</label><input class="field-inp" id="inf-subway" placeholder="1호선·2호선 신도림역 1번 출구, 도보 5분" style="width:100%;"></div>
+          <div><label class="field-lbl">🚌 버스</label><input class="field-inp" id="inf-bus" placeholder="신도림테크노마트 정류장 하차" style="width:100%;"></div>
+          <div><label class="field-lbl">🚗 주차</label><input class="field-inp" id="inf-parking" placeholder="건물 내 주차장 이용 가능 (2시간 무료)" style="width:100%;"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Notices</div>
+        <div class="card-title" style="margin-bottom:18px;">예식장 안내</div>
+        <div style="display:flex;flex-direction:column;gap:16px;" id="inf-notices">
+          <div><label class="field-lbl">안내 1 제목</label><input class="field-inp" id="inf-n1t" placeholder="NOTICE 01" style="width:100%;margin-bottom:6px;"><label class="field-lbl">안내 1 내용</label><textarea class="field-inp" id="inf-n1" rows="2" style="width:100%;resize:vertical;" placeholder="예) 식사 안내, 드레스코드 등"></textarea></div>
+          <div><label class="field-lbl">안내 2 제목</label><input class="field-inp" id="inf-n2t" placeholder="NOTICE 02" style="width:100%;margin-bottom:6px;"><label class="field-lbl">안내 2 내용</label><textarea class="field-inp" id="inf-n2" rows="2" style="width:100%;resize:vertical;" placeholder="예) 답례품, 사진 촬영 안내 등"></textarea></div>
+          <div><label class="field-lbl">안내 3 제목</label><input class="field-inp" id="inf-n3t" placeholder="NOTICE 03" style="width:100%;margin-bottom:6px;"><label class="field-lbl">안내 3 내용</label><textarea class="field-inp" id="inf-n3" rows="2" style="width:100%;resize:vertical;" placeholder="예) 기타 안내사항 등"></textarea></div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-dark" onclick="saveInfo()">저장</button>
+        <button class="btn btn-light" onclick="resetInfo()">기본값으로</button>
       </div>
     </div>
 
@@ -385,6 +460,84 @@ const DEFAULT_ACCOUNT = {
 };
 
 /* ══════════════════════════════════════════
+   기본정보
+══════════════════════════════════════════ */
+const DEFAULT_INFO = {
+  groom:'권용식', bride:'이유리',
+  groomFather:'권순철', groomMother:'김정미',
+  brideFather:'이충섭', brideMother:'강랑',
+  date:'2026-11-28', time:'14:30',
+  venue:'신도림테크노마트', hall:'7층 웨딩홀',
+  address:'서울 구로구 새말로 97',
+  greeting:`찬바람에 코트 주머니가 자연스레 그리워지는 겨울의 초입.\n저희 두 사람, 이제 각자의 주머니가 아닌\n하나의 주머니에 손을 맞잡고 같은 길을 걸어가려 합니다.\n\n추운 날씨에도 서로만 있으면\n견딜 수 있다는 든든한 믿음으로 새 출발을 합니다.\n\n귀한 걸음 하시어 저희의 시작을\n따뜻하게 축복해 주시면 감사하겠습니다.`,
+  subway:'1호선·2호선 신도림역 1번 출구, 도보 5분',
+  bus:'신도림테크노마트 정류장 하차',
+  parking:'건물 내 주차장 이용 가능 (2시간 무료)',
+  notices:[
+    {title:'NOTICE 01', text:'안내 1 내용을 여기에 입력해주세요.\n예) 식사 안내, 드레스코드 등'},
+    {title:'NOTICE 02', text:'안내 2 내용을 여기에 입력해주세요.\n예) 답례품, 사진 촬영 안내 등'},
+    {title:'NOTICE 03', text:'안내 3 내용을 여기에 입력해주세요.\n예) 기타 안내사항 등'},
+  ]
+};
+
+function getInfo(){ return JSON.parse(localStorage.getItem('wedding_info')||'null') || DEFAULT_INFO; }
+
+function loadInfo(){
+  const d = getInfo();
+  document.getElementById('inf-groom').value   = d.groom;
+  document.getElementById('inf-bride').value   = d.bride;
+  document.getElementById('inf-gf').value      = d.groomFather;
+  document.getElementById('inf-gm').value      = d.groomMother;
+  document.getElementById('inf-bf').value      = d.brideFather;
+  document.getElementById('inf-bm').value      = d.brideMother;
+  document.getElementById('inf-date').value    = d.date;
+  document.getElementById('inf-time').value    = d.time;
+  document.getElementById('inf-venue').value   = d.venue;
+  document.getElementById('inf-hall').value    = d.hall;
+  document.getElementById('inf-addr').value    = d.address;
+  document.getElementById('inf-greeting').value= d.greeting;
+  document.getElementById('inf-subway').value  = d.subway;
+  document.getElementById('inf-bus').value     = d.bus;
+  document.getElementById('inf-parking').value = d.parking;
+  if(d.notices[0]){ document.getElementById('inf-n1t').value=d.notices[0].title; document.getElementById('inf-n1').value=d.notices[0].text; }
+  if(d.notices[1]){ document.getElementById('inf-n2t').value=d.notices[1].title; document.getElementById('inf-n2').value=d.notices[1].text; }
+  if(d.notices[2]){ document.getElementById('inf-n3t').value=d.notices[2].title; document.getElementById('inf-n3').value=d.notices[2].text; }
+}
+
+function saveInfo(){
+  const d = {
+    groom:  document.getElementById('inf-groom').value.trim(),
+    bride:  document.getElementById('inf-bride').value.trim(),
+    groomFather: document.getElementById('inf-gf').value.trim(),
+    groomMother: document.getElementById('inf-gm').value.trim(),
+    brideFather: document.getElementById('inf-bf').value.trim(),
+    brideMother: document.getElementById('inf-bm').value.trim(),
+    date:   document.getElementById('inf-date').value,
+    time:   document.getElementById('inf-time').value,
+    venue:  document.getElementById('inf-venue').value.trim(),
+    hall:   document.getElementById('inf-hall').value.trim(),
+    address:document.getElementById('inf-addr').value.trim(),
+    greeting:document.getElementById('inf-greeting').value,
+    subway: document.getElementById('inf-subway').value.trim(),
+    bus:    document.getElementById('inf-bus').value.trim(),
+    parking:document.getElementById('inf-parking').value.trim(),
+    notices:[
+      {title:document.getElementById('inf-n1t').value.trim(), text:document.getElementById('inf-n1').value},
+      {title:document.getElementById('inf-n2t').value.trim(), text:document.getElementById('inf-n2').value},
+      {title:document.getElementById('inf-n3t').value.trim(), text:document.getElementById('inf-n3').value},
+    ]
+  };
+  localStorage.setItem('wedding_info', JSON.stringify(d));
+  toast('기본 정보가 저장되었습니다 ✦');
+}
+
+function resetInfo(){
+  localStorage.removeItem('wedding_info');
+  loadInfo();
+  toast('기본값으로 초기화되었습니다');
+}
+
+/* ══════════════════════════════════════════
    THEME DATA
 ══════════════════════════════════════════ */
 const THEMES = [
@@ -445,6 +598,7 @@ function switchTab(name, btn){
    INIT
 ══════════════════════════════════════════ */
 function init(){
+  loadInfo();
   renderGallery();
   renderContactForm();
   renderAccountForm();

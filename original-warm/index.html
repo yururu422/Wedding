@@ -1180,6 +1180,79 @@ const DEFAULT_ACCOUNT = {
     </div>`).join('');
 })();
 
+/* ════════════════════════════════════════════
+   기본정보 — localStorage에서 읽어 반영
+════════════════════════════════════════════ */
+(function(){
+  const DEFAULT = {
+    groom:'권용식', bride:'이유리',
+    groomFather:'권순철', groomMother:'김정미',
+    brideFather:'이충섭', brideMother:'강랑',
+    date:'2026-11-28', time:'14:30',
+    venue:'신도림테크노마트', hall:'7층 웨딩홀',
+    address:'서울 구로구 새말로 97',
+    greeting:`찬바람에 코트 주머니가 자연스레 그리워지는 겨울의 초입.<br>저희 두 사람, 이제 각자의 주머니가 아닌<br>하나의 주머니에 손을 맞잡고 같은 길을 걸어가려 합니다.<br><br>추운 날씨에도 서로만 있으면<br>견딜 수 있다는 든든한 믿음으로 새 출발을 합니다.<br><br>귀한 걸음 하시어 저희의 시작을<br>따뜻하게 축복해 주시면 감사하겠습니다.`,
+    subway:'1호선·2호선 신도림역 1번 출구, 도보 5분',
+    bus:'신도림테크노마트 정류장 하차',
+    parking:'건물 내 주차장 이용 가능 (2시간 무료)',
+    notices:[
+      {title:'NOTICE 01', text:'안내 1 내용을 여기에 입력해주세요.<br>예) 식사 안내, 드레스코드 등'},
+      {title:'NOTICE 02', text:'안내 2 내용을 여기에 입력해주세요.<br>예) 답례품, 사진 촬영 안내 등'},
+      {title:'NOTICE 03', text:'안내 3 내용을 여기에 입력해주세요.<br>예) 기타 안내사항 등'},
+    ]
+  };
+  const d = JSON.parse(localStorage.getItem('wedding_info')||'null') || DEFAULT;
+
+  // 이름
+  document.querySelectorAll('.hero-names').forEach(el=> el.textContent = d.groom+' · '+d.bride);
+  document.querySelectorAll('.invite-sign b:first-child').forEach(el=>el.textContent=d.groom);
+  document.querySelectorAll('.invite-sign b:last-child').forEach(el=>el.textContent=d.bride);
+
+  // 초대말 가족 정보
+  const fam = document.querySelector('.invite-family');
+  if(fam) fam.innerHTML = `<b>${esc(d.groomFather)}</b> · <b>${esc(d.groomMother)}</b>의 장남 <b>${esc(d.groom)}</b><br><b>${esc(d.brideFather)}</b> · <b>${esc(d.brideMother)}</b>의 차녀 <b>${esc(d.bride)}</b>`;
+
+  // 인사말
+  const msg = document.querySelector('.invite-msg');
+  if(msg) msg.innerHTML = d.greeting.replace(/\n/g,'<br>');
+
+  // 날짜
+  const wed = new Date(d.date+'T'+d.time+':00');
+  const days=['일','월','화','수','목','금','토'];
+  const h = wed.getHours() >= 12 ? '오후' : '오전';
+  const hh = wed.getHours() % 12 || 12;
+  const mm = wed.getMinutes() ? ' '+wed.getMinutes()+'분' : '';
+  const dateStr = `${wed.getFullYear()}년 ${wed.getMonth()+1}월 ${wed.getDate()}일 ${days[wed.getDay()]}요일 ${h} ${hh}시${mm}`;
+  document.querySelectorAll('.cd-sub').forEach(el=>el.textContent=dateStr);
+  document.querySelector('.hero-date') && (document.querySelector('.hero-date').textContent = d.date.replace(/-/g,'·').replace(/(\d{4})·(\d{2})·(\d{2})/,'$1 · $2 · $3 · '+days[wed.getDay()].toUpperCase()+'AT'));
+
+  // 주소
+  const addrMain = document.querySelector('.addr-main');
+  const addrSub  = document.querySelector('.addr-sub');
+  if(addrMain) addrMain.textContent = d.address;
+  if(addrSub)  addrSub.textContent  = d.venue + ' ' + d.hall;
+
+  // 교통
+  const tItems = document.querySelectorAll('.t-txt');
+  if(tItems[0]) tItems[0].innerHTML = `<b>지하철</b><br>${esc(d.subway)}`;
+  if(tItems[1]) tItems[1].innerHTML = `<b>버스</b><br>${esc(d.bus)}`;
+  if(tItems[2]) tItems[2].innerHTML = `<b>주차</b><br>${esc(d.parking)}`;
+
+  // 예식장 안내
+  const vCards = document.querySelectorAll('.venue-card .venue-body');
+  d.notices.forEach((n,i)=>{
+    if(!vCards[i]) return;
+    const numEl = vCards[i].querySelector('.venue-num');
+    const txtEl = vCards[i].querySelector('.venue-txt');
+    if(numEl) numEl.textContent = n.title;
+    if(txtEl) txtEl.innerHTML   = n.text.replace(/\n/g,'<br>');
+  });
+
+  // D-day 업데이트 (WEDDING 변수 재설정)
+  window.WEDDING = wed;
+  tick();
+})();
+
 /* INIT */
 loadGb();
 </script>

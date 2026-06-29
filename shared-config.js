@@ -6,6 +6,25 @@
 (function () {
   if (typeof CONFIG === 'undefined') return;
 
+  /* ── 기본정보 → CONFIG 반영 ── */
+  const info = JSON.parse(localStorage.getItem('wedding_info') || 'null');
+  if (info) {
+    CONFIG.groom.name   = info.groom   || CONFIG.groom.name;
+    CONFIG.groom.father = info.groomFather || CONFIG.groom.father;
+    CONFIG.groom.mother = info.groomMother || CONFIG.groom.mother;
+    CONFIG.bride.name   = info.bride   || CONFIG.bride.name;
+    CONFIG.bride.father = info.brideFather || CONFIG.bride.father;
+    CONFIG.bride.mother = info.brideMother || CONFIG.bride.mother;
+    if (CONFIG.wedding) {
+      CONFIG.wedding.date    = info.date    || CONFIG.wedding.date;
+      CONFIG.wedding.time    = info.time    || CONFIG.wedding.time;
+      CONFIG.wedding.venue   = info.venue   || CONFIG.wedding.venue;
+      CONFIG.wedding.hall    = info.hall    || CONFIG.wedding.hall;
+      CONFIG.wedding.address = info.address || CONFIG.wedding.address;
+    }
+    if (CONFIG.greeting) CONFIG.greeting.content = info.greeting || CONFIG.greeting.content;
+  }
+
   /* ── 연락처 → CONFIG 반영 ── */
   const contact = JSON.parse(localStorage.getItem('contact_info') || 'null');
   if (contact) {
