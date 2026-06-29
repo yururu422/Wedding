@@ -22,7 +22,19 @@
       CONFIG.wedding.hall    = info.hall    || CONFIG.wedding.hall;
       CONFIG.wedding.address = info.address || CONFIG.wedding.address;
     }
-    if (CONFIG.greeting) CONFIG.greeting.content = info.greeting || CONFIG.greeting.content;
+    if (CONFIG.greeting) {
+      CONFIG.greeting.content = info.greeting     || CONFIG.greeting.content;
+      CONFIG.greeting.title   = info.greetingTitle|| CONFIG.greeting.title;
+    }
+    if (CONFIG.story) {
+      CONFIG.story.title   = info.storyTitle || CONFIG.story.title;
+      CONFIG.story.content = info.story      || CONFIG.story.content;
+    }
+    if (info.kakao || info.naver) {
+      if (!CONFIG.wedding.mapLinks) CONFIG.wedding.mapLinks = {};
+      if (info.kakao) CONFIG.wedding.mapLinks.kakao = info.kakao;
+      if (info.naver) CONFIG.wedding.mapLinks.naver = info.naver;
+    }
   }
 
   /* ── 연락처 → CONFIG 반영 ── */
