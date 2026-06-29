@@ -1051,30 +1051,34 @@ function loadHeroImg(input){
 
 // 히어로 이미지 자동 로드
 (function(){
-  // 관리자 페이지에서 선택한 표지 사진 (GitHub raw URL)
-  const adminHero = localStorage.getItem('hero_img_url');
-  if(adminHero){ showHeroImg(adminHero); return; }
-  const saved = localStorage.getItem('hero_img');
-  if(saved){ showHeroImg(saved); return; }
-
-  const FOLDER = '../모바일 청첩장 사진/';
-  const names = [
-    FOLDER+'hero.JPG', FOLDER+'hero.jpg', FOLDER+'hero.jpeg', FOLDER+'hero.png',
-    'hero.JPG','hero.jpg','hero.jpeg','hero.png'
-  ];
-  let idx = 0;
+  const GH_BASE = 'https://yururu422.github.io/Wedding/';
+  const GH_API  = 'https://api.github.com/repos/yururu422/Wedding/contents/photos';
   const msg = document.getElementById('hero-ph-msg');
-  function tryNext(){
-    if(idx >= names.length){
-      if(msg) msg.textContent = '아래 버튼으로 사진을 선택해주세요';
-      return;
-    }
-    const img = document.getElementById('hero-img');
-    img.onload  = ()=>{ showHeroImg(img.src); };
-    img.onerror = ()=>{ idx++; tryNext(); };
-    img.src = names[idx++];
+
+  function fixHeroUrl(url) {
+    if (!url) return null;
+    if (url.startsWith('https://') || url.startsWith('http://')) return url;
+    const name = decodeURIComponent(url.split('/').pop());
+    return GH_BASE + 'photos/' + encodeURIComponent(name);
   }
-  tryNext();
+
+  // localStorage에 있으면 우선 사용
+  const adminHero = fixHeroUrl(localStorage.getItem('hero_img_url') || localStorage.getItem('hero_img'));
+  if(adminHero){ showHeroImg(adminHero); return; }
+
+  // 없으면 GitHub photos/ 폴더 첫 번째 사진 자동 사용
+  fetch(GH_API)
+    .then(r => r.json())
+    .then(files => {
+      const imgs = files.filter(f => /\.(jpg|jpeg|png|gif|webp)$/i.test(f.name));
+      if(imgs.length){
+        const url = GH_BASE + 'photos/' + encodeURIComponent(imgs[0].name);
+        showHeroImg(url);
+      } else {
+        if(msg) msg.textContent = '아래 버튼으로 사진을 선택해주세요';
+      }
+    })
+    .catch(() => { if(msg) msg.textContent = '아래 버튼으로 사진을 선택해주세요'; });
 })();
 
 /* ════════════════════════════════════════════
