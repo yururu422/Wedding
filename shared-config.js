@@ -86,8 +86,19 @@
   }
 
   /* ── 표지 사진 ── */
-  const heroUrl = localStorage.getItem('hero_img_url');
-  if (heroUrl) window.__ADMIN_HERO = heroUrl;
+  var heroUrl = localStorage.getItem('hero_img_url');
+  if (heroUrl) {
+    window.__ADMIN_HERO = heroUrl;
+  } else {
+    // localStorage 없으면 GitHub API 첫 번째 사진으로 자동 설정
+    window.__ADMIN_HERO_PROMISE = fetch(GH_API)
+      .then(function(r){ return r.json(); })
+      .then(function(files){
+        var imgs = files.filter(function(f){ return /\.(jpg|jpeg|png|gif|webp)$/i.test(f.name); });
+        return imgs.length ? GH_BASE + 'photos/' + encodeURIComponent(imgs[0].name) : null;
+      })
+      .catch(function(){ return null; });
+  }
 
   /* ── 사진 회전 (MutationObserver로 모든 템플릿에 자동 적용) ── */
   const rots = JSON.parse(localStorage.getItem('photo_rotations') || '{}');
@@ -113,6 +124,20 @@
   document.addEventListener('DOMContentLoaded', function () {
     rotObserver.observe(document.body, { childList: true, subtree: true });
     document.querySelectorAll('img').forEach(applyRotationToImg);
+
+    /* ── 표지 사진 강제 적용 (script.js initHero 이후) ── */
+    function applyHero(url) {
+      if (!url) return;
+      var el = document.getElementById('heroPhoto') || document.getElementById('hero-img');
+      if (el) el.src = url;
+    }
+    setTimeout(function() {
+      if (window.__ADMIN_HERO) {
+        applyHero(window.__ADMIN_HERO);
+      } else if (window.__ADMIN_HERO_PROMISE) {
+        window.__ADMIN_HERO_PROMISE.then(applyHero);
+      }
+    }, 0);
 
     /* 사진 저장/확대 차단 */
     var style = document.createElement('style');
