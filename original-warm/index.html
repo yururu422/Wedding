@@ -817,8 +817,15 @@ setInterval(tick,1000); tick();
     '../모바일 청첩장 사진/갤러리 이미지 7.JPG',
     '../모바일 청첩장 사진/갤러리 이미지 8.JPG',
   ];
+  const GH_BASE = 'https://yururu422.github.io/Wedding/';
+  function fixUrl(url) {
+    if (url.startsWith('https://') || url.startsWith('http://')) return url;
+    // 깨진 URL(null/..., 상대경로)에서 파일명만 추출해 GitHub Pages URL로 복구
+    const name = decodeURIComponent(url.split('/').pop());
+    return GH_BASE + 'photos/' + encodeURIComponent(name);
+  }
   const saved = localStorage.getItem('gallery_order');
-  const imgs = saved ? JSON.parse(saved) : DEFAULT_IMGS;
+  const imgs = (saved ? JSON.parse(saved) : DEFAULT_IMGS).map(fixUrl);
 
   const track = document.getElementById('g-track');
   const dotsEl = document.getElementById('g-dots');
