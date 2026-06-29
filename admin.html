@@ -7,208 +7,144 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg:     #F7F3EE;
-      --accent: #B89E82;
-      --text:   #3D3028;
-      --muted:  #9A8878;
-      --border: rgba(184,158,130,.22);
-      --card:   #fff;
-      --red:    #C47E7E;
-      --green:  #7EAF8A;
-      --sans:   'Noto Sans KR', sans-serif;
-      --eng:    'Cormorant Garamond', serif;
+    :root{
+      --bg:#F7F3EE;--accent:#B89E82;--text:#3D3028;--muted:#9A8878;
+      --border:rgba(184,158,130,.22);--card:#fff;--red:#C47E7E;--green:#7EAF8A;
+      --sans:'Noto Sans KR',sans-serif;--eng:'Cormorant Garamond',serif;
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    body{
-      background:var(--bg);
-      background-image:radial-gradient(circle,rgba(184,158,130,.1) 1px,transparent 1px);
-      background-size:24px 24px;
-      font-family:var(--sans);color:var(--text);min-height:100vh;
-    }
+    body{background:var(--bg);background-image:radial-gradient(circle,rgba(184,158,130,.1) 1px,transparent 1px);background-size:24px 24px;font-family:var(--sans);color:var(--text);min-height:100vh;}
 
-    /* ── 로그인 화면 ── */
-    #login-screen{
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      min-height:100vh;padding:24px;
-    }
-    .login-box{
-      background:#fff;border-radius:24px;padding:48px 36px;
-      box-shadow:0 4px 40px rgba(184,158,130,.15);
-      width:100%;max-width:360px;text-align:center;
-    }
-    .login-title{font-family:var(--eng);font-size:13px;font-weight:300;color:var(--muted);letter-spacing:5px;text-transform:uppercase;margin-bottom:8px;}
-    .login-sub{font-size:20px;color:var(--text);margin-bottom:36px;}
-    .login-input{
-      width:100%;padding:14px 18px;border:1px solid var(--border);
-      border-radius:12px;font-size:18px;text-align:center;
-      letter-spacing:6px;outline:none;background:var(--bg);
-      color:var(--text);font-family:var(--sans);transition:border .2s;
-    }
-    .login-input:focus{border-color:var(--accent);}
-    .login-btn{
-      width:100%;margin-top:16px;padding:14px;
-      background:var(--text);color:#fff;border:none;border-radius:12px;
-      font-size:15px;font-family:var(--sans);cursor:pointer;transition:opacity .2s;
-    }
+    /* ── 로그인 ── */
+    #login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;}
+    .login-box{background:#fff;border-radius:24px;padding:48px 36px;box-shadow:0 4px 40px rgba(184,158,130,.15);width:100%;max-width:360px;text-align:center;}
+    .login-label{font-family:var(--eng);font-size:13px;font-weight:300;color:var(--muted);letter-spacing:5px;text-transform:uppercase;margin-bottom:8px;}
+    .login-title{font-size:22px;color:var(--text);margin-bottom:36px;}
+    .login-inp{width:100%;padding:14px 18px;border:1px solid var(--border);border-radius:12px;font-size:18px;text-align:center;letter-spacing:6px;outline:none;background:var(--bg);color:var(--text);font-family:var(--sans);transition:border .2s;}
+    .login-inp:focus{border-color:var(--accent);}
+    .login-btn{width:100%;margin-top:14px;padding:14px;background:var(--text);color:#fff;border:none;border-radius:12px;font-size:15px;font-family:var(--sans);cursor:pointer;transition:opacity .2s;}
     .login-btn:hover{opacity:.88;}
     .login-err{font-size:13px;color:var(--red);margin-top:12px;display:none;}
 
     /* ── 대시보드 ── */
     #dashboard{display:none;}
-    .top-bar{
-      background:#fff;border-bottom:1px solid var(--border);
-      padding:16px 24px;display:flex;align-items:center;justify-content:space-between;
-      position:sticky;top:0;z-index:100;
-    }
-    .top-title{font-family:var(--eng);font-size:18px;font-weight:300;color:var(--text);}
+    .topbar{background:#fff;border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+    .top-title{font-family:var(--eng);font-size:18px;font-weight:300;}
     .top-sub{font-size:11px;color:var(--muted);letter-spacing:2px;}
-    .logout-btn{
-      padding:8px 16px;border:1px solid var(--border);border-radius:50px;
-      background:none;font-size:12px;color:var(--muted);cursor:pointer;font-family:var(--sans);
-      transition:all .2s;
-    }
+    .top-actions{display:flex;gap:10px;align-items:center;}
+    .go-site{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1px solid var(--border);border-radius:50px;text-decoration:none;color:var(--text);font-size:12px;background:#fff;transition:all .2s;}
+    .go-site:hover{background:var(--bg);}
+    .logout-btn{padding:8px 16px;border:1px solid var(--border);border-radius:50px;background:none;font-size:12px;color:var(--muted);cursor:pointer;font-family:var(--sans);transition:all .2s;}
     .logout-btn:hover{background:var(--bg);}
 
-    .content{max-width:900px;margin:0 auto;padding:32px 24px;}
+    .content{max-width:960px;margin:0 auto;padding:28px 20px;}
 
     /* ── 탭 ── */
-    .tabs{display:flex;gap:4px;margin-bottom:32px;background:#fff;border-radius:14px;padding:4px;box-shadow:0 2px 16px rgba(184,158,130,.1);}
-    .tab{
-      flex:1;padding:10px;border:none;border-radius:10px;
-      background:none;font-size:13px;font-family:var(--sans);
-      color:var(--muted);cursor:pointer;transition:all .2s;
-    }
+    .tabs{display:flex;gap:4px;margin-bottom:28px;background:#fff;border-radius:14px;padding:4px;box-shadow:0 2px 16px rgba(184,158,130,.1);overflow-x:auto;}
+    .tab{flex:1;min-width:80px;padding:10px 6px;border:none;border-radius:10px;background:none;font-size:12px;font-family:var(--sans);color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;}
     .tab.on{background:var(--text);color:#fff;}
-
     .panel{display:none;}
     .panel.on{display:block;}
 
-    /* ── 섹션 카드 ── */
-    .sec-card{background:#fff;border-radius:20px;padding:28px;box-shadow:0 2px 20px rgba(184,158,130,.1);margin-bottom:20px;}
-    .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
-    .sec-label{font-family:var(--eng);font-size:11px;font-weight:300;color:var(--muted);letter-spacing:4px;text-transform:uppercase;}
-    .sec-title{font-size:18px;color:var(--text);margin-top:4px;}
-    .badge{
-      display:inline-flex;align-items:center;justify-content:center;
-      min-width:28px;height:28px;border-radius:50%;
-      background:var(--accent);color:#fff;font-size:12px;font-weight:700;
-    }
+    /* ── 카드 ── */
+    .card{background:#fff;border-radius:20px;padding:24px;box-shadow:0 2px 20px rgba(184,158,130,.1);margin-bottom:16px;}
+    .card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+    .card-label{font-family:var(--eng);font-size:11px;font-weight:300;color:var(--muted);letter-spacing:4px;text-transform:uppercase;}
+    .card-title{font-size:17px;color:var(--text);margin-top:3px;}
+
+    /* ── 통계 ── */
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
+    .stat{background:#fff;border-radius:16px;padding:18px;box-shadow:0 2px 12px rgba(184,158,130,.1);text-align:center;}
+    .stat-n{font-family:var(--eng);font-size:34px;font-weight:300;color:var(--accent);}
+    .stat-l{font-size:11px;color:var(--muted);margin-top:3px;letter-spacing:1px;}
 
     /* ── 갤러리 드래그 ── */
-    .gallery-hint{font-size:12px;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:6px;}
-    .gallery-grid{
-      display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
-    }
-    .g-thumb{
-      aspect-ratio:3/4;border-radius:12px;overflow:hidden;
-      cursor:grab;position:relative;
-      box-shadow:0 2px 12px rgba(184,158,130,.15);
-      transition:transform .2s,box-shadow .2s;
-      user-select:none;
-    }
-    .g-thumb:hover{transform:scale(1.02);box-shadow:0 4px 20px rgba(184,158,130,.25);}
-    .g-thumb.dragging{opacity:.5;transform:scale(0.97);cursor:grabbing;}
-    .g-thumb.drag-over{border:2px dashed var(--accent);}
-    .g-thumb img{width:100%;height:100%;object-fit:cover;pointer-events:none;}
-    .g-num{
-      position:absolute;top:6px;left:6px;
-      background:rgba(61,48,40,.6);color:#fff;
-      border-radius:6px;padding:2px 7px;font-size:11px;
-    }
-    .save-order-btn{
-      margin-top:16px;padding:12px 28px;
-      background:var(--text);color:#fff;border:none;border-radius:12px;
-      font-size:14px;font-family:var(--sans);cursor:pointer;transition:opacity .2s;
-    }
-    .save-order-btn:hover{opacity:.88;}
-    .save-order-btn.saved{background:var(--green);}
+    .g-hint{font-size:12px;color:var(--muted);margin-bottom:14px;}
+    .g-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+    .g-th{aspect-ratio:3/4;border-radius:12px;overflow:hidden;cursor:grab;position:relative;box-shadow:0 2px 12px rgba(184,158,130,.15);transition:transform .15s,box-shadow .15s;user-select:none;}
+    .g-th:hover{transform:scale(1.02);box-shadow:0 4px 20px rgba(184,158,130,.25);}
+    .g-th.dragging{opacity:.45;transform:scale(.95);cursor:grabbing;}
+    .g-th.drag-over{outline:2px dashed var(--accent);outline-offset:2px;}
+    .g-th img{width:100%;height:100%;object-fit:cover;pointer-events:none;}
+    .g-num{position:absolute;top:6px;left:6px;background:rgba(61,48,40,.55);color:#fff;border-radius:6px;padding:2px 7px;font-size:11px;}
+    .btn-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+    .btn{padding:11px 22px;border-radius:12px;border:none;font-size:13px;font-family:var(--sans);cursor:pointer;transition:all .2s;}
+    .btn-dark{background:var(--text);color:#fff;}
+    .btn-dark:hover{opacity:.88;}
+    .btn-light{background:var(--bg);color:var(--text);border:1px solid var(--border);}
+    .btn-light:hover{background:#ede8e0;}
+    .btn-green{background:var(--green);color:#fff;}
+    .btn-red{background:var(--red);color:#fff;}
+    .btn-red:hover,.btn-green:hover{opacity:.88;}
+    .btn.saved{background:var(--green);}
 
-    /* ── RSVP 테이블 ── */
-    .rsvp-empty,.gb-empty{text-align:center;color:var(--muted);font-size:13px;padding:40px 0;}
+    /* ── 콘텐츠 편집 (연락처 / 계좌) ── */
+    .content-section{margin-bottom:28px;}
+    .content-section-title{font-size:14px;color:var(--muted);letter-spacing:2px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+    .person-grid{display:grid;gap:14px;}
+    .person-row{background:var(--bg);border-radius:14px;padding:16px;}
+    .person-label{font-size:11px;color:var(--accent);letter-spacing:2px;margin-bottom:10px;font-weight:500;}
+    .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .field{display:flex;flex-direction:column;gap:4px;}
+    .field label{font-size:11px;color:var(--muted);}
+    .field input{padding:9px 12px;border:1px solid var(--border);border-radius:9px;font-size:13px;font-family:var(--sans);outline:none;background:#fff;color:var(--text);transition:border .2s;}
+    .field input:focus{border-color:var(--accent);}
+    .field input.full{grid-column:1/-1;}
+
+    /* ── RSVP ── */
     .rsvp-list{display:flex;flex-direction:column;gap:10px;}
-    .rsvp-item{
-      background:var(--bg);border-radius:14px;padding:16px 18px;
-      display:grid;grid-template-columns:1fr 1fr;gap:6px;
-    }
-    .rsvp-item .r-name{font-size:15px;font-weight:500;color:var(--text);grid-column:1/-1;}
-    .rsvp-meta{font-size:12px;color:var(--muted);}
-    .rsvp-meta span{color:var(--text);font-weight:500;}
-    .att-badge{
-      display:inline-block;padding:2px 10px;border-radius:50px;font-size:11px;font-weight:700;
-      margin-left:6px;
-    }
-    .att-badge.yes{background:rgba(126,175,138,.15);color:#5a9168;}
-    .att-badge.no{background:rgba(196,126,126,.15);color:#a05050;}
-    .rsvp-del{
-      background:none;border:1px solid var(--border);border-radius:8px;
-      padding:4px 10px;font-size:11px;color:var(--muted);cursor:pointer;
-      font-family:var(--sans);transition:all .2s;grid-column:1/-1;justify-self:end;
-    }
-    .rsvp-del:hover{background:var(--red);color:#fff;border-color:var(--red);}
+    .rsvp-item{background:var(--bg);border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+    .r-name{font-size:15px;font-weight:500;grid-column:1/-1;display:flex;align-items:center;gap:6px;}
+    .att{display:inline-block;padding:2px 9px;border-radius:50px;font-size:11px;font-weight:700;}
+    .att.y{background:rgba(126,175,138,.15);color:#5a9168;}
+    .att.n{background:rgba(196,126,126,.15);color:#a05050;}
+    .r-meta{font-size:12px;color:var(--muted);}
+    .r-meta b{color:var(--text);}
+    .r-del{grid-column:1/-1;justify-self:end;padding:4px 10px;border:1px solid var(--border);border-radius:8px;background:none;font-size:11px;color:var(--muted);cursor:pointer;font-family:var(--sans);transition:all .2s;}
+    .r-del:hover{background:var(--red);color:#fff;border-color:var(--red);}
 
     /* ── 방명록 ── */
-    .gb-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-    .gb-item{
-      background:var(--bg);border-radius:12px;padding:14px;
-      position:relative;
-    }
-    .gb-author{font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px;}
-    .gb-msg{font-size:13px;color:var(--muted);line-height:1.6;word-break:break-word;}
-    .gb-date{font-size:10px;color:#bbb;margin-top:8px;}
-    .gb-del{
-      position:absolute;top:10px;right:10px;
-      background:none;border:none;color:#ccc;cursor:pointer;font-size:14px;
-      transition:color .2s;
-    }
+    .gb-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .gb-item{background:var(--bg);border-radius:12px;padding:13px;position:relative;}
+    .gb-author{font-size:13px;font-weight:500;margin-bottom:5px;}
+    .gb-msg{font-size:12px;color:var(--muted);line-height:1.6;word-break:break-word;}
+    .gb-date{font-size:10px;color:#bbb;margin-top:7px;}
+    .gb-del{position:absolute;top:9px;right:9px;background:none;border:none;color:#ccc;cursor:pointer;font-size:13px;transition:color .2s;}
     .gb-del:hover{color:var(--red);}
 
     /* ── 설정 ── */
-    .setting-row{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;}
-    .setting-label{font-size:12px;color:var(--muted);letter-spacing:1px;}
-    .setting-input{
-      padding:12px 14px;border:1px solid var(--border);border-radius:10px;
-      font-size:14px;font-family:var(--sans);outline:none;background:var(--bg);
-      color:var(--text);transition:border .2s;
-    }
-    .setting-input:focus{border-color:var(--accent);}
-    .setting-btn{
-      padding:12px 24px;background:var(--text);color:#fff;
-      border:none;border-radius:10px;font-size:14px;font-family:var(--sans);
-      cursor:pointer;transition:opacity .2s;
-    }
-    .setting-btn:hover{opacity:.88;}
-    .setting-btn.danger{background:var(--red);}
+    .setting-row{margin-bottom:22px;}
+    .setting-lbl{font-size:12px;color:var(--muted);letter-spacing:1px;margin-bottom:8px;}
+    .setting-inp{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-size:14px;font-family:var(--sans);outline:none;background:var(--bg);color:var(--text);transition:border .2s;}
+    .setting-inp:focus{border-color:var(--accent);}
 
-    /* ── 통계 카드 ── */
-    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
-    .stat-box{background:#fff;border-radius:16px;padding:20px;box-shadow:0 2px 12px rgba(184,158,130,.1);text-align:center;}
-    .stat-num{font-family:var(--eng);font-size:36px;font-weight:300;color:var(--accent);}
-    .stat-lbl{font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:1px;}
+    /* ── 빈 상태 ── */
+    .empty{text-align:center;color:var(--muted);font-size:13px;padding:36px 0;}
 
-    /* ── 청첩장 바로가기 ── */
-    .go-main{
-      display:inline-flex;align-items:center;gap:6px;
-      padding:10px 20px;border:1px solid var(--border);border-radius:50px;
-      text-decoration:none;color:var(--text);font-size:13px;
-      transition:all .2s;background:#fff;
-    }
-    .go-main:hover{background:var(--bg);}
-
-    /* toast */
-    .toast{
-      position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(16px);
-      background:rgba(61,48,40,.9);color:#fff;padding:10px 24px;
-      border-radius:50px;font-size:13px;opacity:0;transition:all .3s;
-      pointer-events:none;z-index:9999;white-space:nowrap;
-    }
+    /* ── 토스트 ── */
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(16px);background:rgba(61,48,40,.9);color:#fff;padding:10px 24px;border-radius:50px;font-size:13px;opacity:0;transition:all .3s;pointer-events:none;z-index:9999;white-space:nowrap;}
     .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-    @media(max-width:600px){
-      .gallery-grid{grid-template-columns:repeat(3,1fr);}
-      .gb-list{grid-template-columns:1fr;}
+    /* ── 테마 그리드 ── */
+    .theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+    .theme-card{border-radius:16px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all .2s;position:relative;}
+    .theme-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(184,158,130,.2);}
+    .theme-card.selected{border-color:var(--accent);box-shadow:0 0 0 3px rgba(184,158,130,.25);}
+    .theme-preview{height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:10px;}
+    .theme-name{background:#fff;padding:10px 8px;text-align:center;font-size:11px;color:var(--text);font-weight:500;border-top:1px solid rgba(0,0,0,.07);}
+    .theme-check{position:absolute;top:7px;right:7px;width:20px;height:20px;background:var(--accent);border-radius:50%;display:none;align-items:center;justify-content:center;color:#fff;font-size:11px;}
+    .theme-card.selected .theme-check{display:flex;}
+    .theme-dots{display:flex;gap:4px;}
+    .theme-dot{width:10px;height:10px;border-radius:50%;}
+    .theme-sample-text{font-size:9px;opacity:.7;letter-spacing:1px;}
+    .theme-active-badge{display:inline-block;background:var(--green);color:#fff;font-size:10px;padding:2px 8px;border-radius:50px;margin-top:6px;}
+
+    @media(max-width:640px){.theme-grid{grid-template-columns:repeat(2,1fr);}}
+      .g-grid{grid-template-columns:repeat(3,1fr);}
+      .gb-grid{grid-template-columns:1fr;}
       .stats{grid-template-columns:repeat(3,1fr);}
-      .stat-num{font-size:26px;}
+      .field-grid{grid-template-columns:1fr;}
+      .top-sub{display:none;}
     }
   </style>
 </head>
@@ -217,10 +153,10 @@
 <!-- ════ 로그인 ════ -->
 <div id="login-screen">
   <div class="login-box">
-    <div class="login-title">Admin</div>
-    <div class="login-sub">관리자 페이지</div>
-    <input class="login-input" type="password" id="pw-input" placeholder="••••"
-           maxlength="20" onkeydown="if(event.key==='Enter') doLogin()">
+    <div class="login-label">Admin</div>
+    <div class="login-title">관리자 페이지</div>
+    <input class="login-inp" type="password" id="pw-inp" placeholder="••••"
+           onkeydown="if(event.key==='Enter')doLogin()">
     <button class="login-btn" onclick="doLogin()">입장</button>
     <div class="login-err" id="pw-err">비밀번호가 틀렸어요</div>
   </div>
@@ -228,129 +164,186 @@
 
 <!-- ════ 대시보드 ════ -->
 <div id="dashboard">
-
-  <div class="top-bar">
+  <div class="topbar">
     <div>
       <div class="top-title">Wedding Admin</div>
       <div class="top-sub">권용식 ❤️ 이유리 · 2026.11.28</div>
     </div>
-    <div style="display:flex;gap:10px;align-items:center;">
-      <a class="go-main" href="index.html" target="_blank">🔗 청첩장 보기</a>
+    <div class="top-actions">
+      <a class="go-site" href="index.html" target="_blank">🔗 청첩장 보기</a>
       <button class="logout-btn" onclick="logout()">로그아웃</button>
     </div>
   </div>
 
   <div class="content">
-
-    <!-- 탭 -->
     <div class="tabs">
       <button class="tab on" onclick="switchTab('gallery',this)">🖼 갤러리</button>
+      <button class="tab" onclick="switchTab('contact',this)">📞 연락처</button>
+      <button class="tab" onclick="switchTab('account',this)">🏦 계좌</button>
+      <button class="tab" onclick="switchTab('theme',this)">🎨 테마</button>
       <button class="tab" onclick="switchTab('rsvp',this)">✉️ 참석여부</button>
       <button class="tab" onclick="switchTab('guestbook',this)">💌 방명록</button>
       <button class="tab" onclick="switchTab('settings',this)">⚙️ 설정</button>
     </div>
 
-    <!-- ── 갤러리 패널 ── -->
+    <!-- ── 갤러리 ── -->
     <div class="panel on" id="panel-gallery">
-      <div class="sec-card">
-        <div class="sec-head">
+      <!-- GitHub 사진 선택 카드 -->
+      <div class="card" id="gh-picker-card">
+        <div class="card-head">
           <div>
-            <div class="sec-label">Gallery</div>
-            <div class="sec-title">갤러리 순서 관리</div>
+            <div class="card-label">GitHub</div>
+            <div class="card-title">사진 불러오기</div>
+          </div>
+          <button class="btn btn-dark" onclick="loadGithubPhotos()" id="gh-load-btn">📂 불러오기</button>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">GitHub 레포의 사진 폴더에서 사진을 골라 갤러리에 추가하세요</p>
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+          <div class="field" style="flex:1;min-width:200px;">
+            <label style="font-size:11px;color:var(--muted);">폴더 경로</label>
+            <input type="text" id="gh-folder" value="모바일 청첩장 사진"
+              style="padding:9px 12px;border:1px solid var(--border);border-radius:9px;font-size:13px;font-family:var(--sans);outline:none;background:#fff;color:var(--text);width:100%;">
           </div>
         </div>
-        <div class="gallery-hint">✦ 사진을 드래그해서 순서를 바꾸세요</div>
-        <div class="gallery-grid" id="gallery-grid"></div>
-        <button class="save-order-btn" id="save-order-btn" onclick="saveOrder()">순서 저장</button>
-        <button class="save-order-btn" style="margin-left:10px;background:var(--bg);color:var(--text);border:1px solid var(--border);" onclick="resetOrder()">초기화</button>
+        <div id="gh-photo-grid" style="display:none;">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">✦ 사진을 클릭해서 선택/해제하세요</div>
+          <div class="g-grid" id="gh-grid" style="grid-template-columns:repeat(4,1fr);"></div>
+          <div class="btn-row" style="margin-top:14px;">
+            <button class="btn btn-green" onclick="applyGithubSelection()">선택한 사진 갤러리에 적용</button>
+            <button class="btn btn-light" onclick="selectAllGhPhotos()">전체 선택</button>
+          </div>
+        </div>
+        <div id="gh-loading" style="display:none;text-align:center;padding:24px;color:var(--muted);font-size:13px;">불러오는 중...</div>
+        <div id="gh-error" style="display:none;font-size:12px;color:var(--red);padding:10px;background:rgba(196,126,126,.08);border-radius:8px;"></div>
+      </div>
+
+      <!-- 순서 관리 카드 -->
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-label">Gallery</div>
+            <div class="card-title">갤러리 순서 관리</div>
+          </div>
+        </div>
+        <div class="g-hint">✦ 사진을 드래그해서 순서를 바꾼 후 저장하세요</div>
+        <div class="g-grid" id="g-grid"></div>
+        <div class="btn-row">
+          <button class="btn btn-dark" id="save-g-btn" onclick="saveGalleryOrder()">순서 저장</button>
+          <button class="btn btn-light" onclick="resetGallery()">초기화</button>
+        </div>
       </div>
     </div>
 
-    <!-- ── RSVP 패널 ── -->
-    <div class="panel" id="panel-rsvp">
-      <!-- 통계 -->
-      <div class="stats">
-        <div class="stat-box">
-          <div class="stat-num" id="stat-total">0</div>
-          <div class="stat-lbl">총 응답</div>
+    <!-- ── 연락처 ── -->
+    <div class="panel" id="panel-contact">
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-label">Contact</div>
+            <div class="card-title">연락처 관리</div>
+          </div>
         </div>
-        <div class="stat-box">
-          <div class="stat-num" id="stat-yes">0</div>
-          <div class="stat-lbl">참석</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" id="stat-guests">0</div>
-          <div class="stat-lbl">총 인원</div>
+        <div id="contact-form"></div>
+        <div class="btn-row">
+          <button class="btn btn-dark" onclick="saveContact()">저장</button>
+          <button class="btn btn-light" onclick="resetContact()">기본값으로</button>
         </div>
       </div>
-      <div class="sec-card">
-        <div class="sec-head">
+    </div>
+
+    <!-- ── 계좌 ── -->
+    <div class="panel" id="panel-account">
+      <div class="card">
+        <div class="card-head">
           <div>
-            <div class="sec-label">RSVP</div>
-            <div class="sec-title">참석 의사 목록</div>
+            <div class="card-label">Account</div>
+            <div class="card-title">계좌 관리</div>
           </div>
-          <button onclick="clearRsvp()" style="padding:8px 14px;border:1px solid var(--border);border-radius:50px;background:none;font-size:12px;color:var(--muted);cursor:pointer;font-family:var(--sans);">전체 삭제</button>
+        </div>
+        <div id="account-form"></div>
+        <div class="btn-row">
+          <button class="btn btn-dark" onclick="saveAccount()">저장</button>
+          <button class="btn btn-light" onclick="resetAccount()">기본값으로</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 테마 ── -->
+    <div class="panel" id="panel-theme">
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-label">Theme</div>
+            <div class="card-title">테마 선택</div>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">테마를 선택하면 방문자 청첩장 화면이 바뀝니다. 사진은 각 테마 폴더의 <code style="background:var(--bg);padding:2px 6px;border-radius:4px;font-size:12px;">images/</code> 폴더에 넣어야 보입니다.</p>
+        <div class="theme-grid" id="theme-grid"></div>
+      </div>
+    </div>
+
+    <!-- ── RSVP ── -->
+    <div class="panel" id="panel-rsvp">
+      <div class="stats">
+        <div class="stat"><div class="stat-n" id="stat-total">0</div><div class="stat-l">총 응답</div></div>
+        <div class="stat"><div class="stat-n" id="stat-yes">0</div><div class="stat-l">참석</div></div>
+        <div class="stat"><div class="stat-n" id="stat-guests">0</div><div class="stat-l">총 인원</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div><div class="card-label">RSVP</div><div class="card-title">참석 의사 목록</div></div>
+          <button class="btn btn-light" onclick="clearRsvp()" style="font-size:12px;padding:8px 14px;">전체 삭제</button>
         </div>
         <div class="rsvp-list" id="rsvp-list"></div>
       </div>
     </div>
 
-    <!-- ── 방명록 패널 ── -->
+    <!-- ── 방명록 ── -->
     <div class="panel" id="panel-guestbook">
-      <div class="sec-card">
-        <div class="sec-head">
-          <div>
-            <div class="sec-label">Guestbook</div>
-            <div class="sec-title">축하 메시지 목록</div>
-          </div>
-          <button onclick="clearGb()" style="padding:8px 14px;border:1px solid var(--border);border-radius:50px;background:none;font-size:12px;color:var(--muted);cursor:pointer;font-family:var(--sans);">전체 삭제</button>
+      <div class="card">
+        <div class="card-head">
+          <div><div class="card-label">Guestbook</div><div class="card-title">축하 메시지</div></div>
+          <button class="btn btn-light" onclick="clearGb()" style="font-size:12px;padding:8px 14px;">전체 삭제</button>
         </div>
-        <div class="gb-list" id="gb-list"></div>
+        <div class="gb-grid" id="gb-grid"></div>
       </div>
     </div>
 
-    <!-- ── 설정 패널 ── -->
+    <!-- ── 설정 ── -->
     <div class="panel" id="panel-settings">
-      <div class="sec-card">
-        <div class="sec-head"><div>
-          <div class="sec-label">Settings</div>
-          <div class="sec-title">관리자 설정</div>
-        </div></div>
-
+      <div class="card">
+        <div class="card-head"><div><div class="card-label">Settings</div><div class="card-title">관리자 설정</div></div></div>
         <div class="setting-row">
-          <div class="setting-label">관리자 비밀번호 변경</div>
-          <input class="setting-input" type="password" id="new-pw" placeholder="새 비밀번호 입력">
-          <input class="setting-input" type="password" id="new-pw2" placeholder="새 비밀번호 확인" style="margin-top:8px;">
-          <button class="setting-btn" onclick="changePw()" style="margin-top:8px;width:fit-content;">비밀번호 변경</button>
+          <div class="setting-lbl">새 비밀번호</div>
+          <input class="setting-inp" type="password" id="new-pw1" placeholder="새 비밀번호" style="margin-bottom:8px;">
+          <input class="setting-inp" type="password" id="new-pw2" placeholder="비밀번호 확인">
+          <div class="btn-row" style="margin-top:10px;">
+            <button class="btn btn-dark" onclick="changePw()">비밀번호 변경</button>
+          </div>
         </div>
-
-        <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;">
-
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
         <div class="setting-row">
-          <div class="setting-label">데이터 초기화</div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            <button class="setting-btn danger" onclick="clearRsvp()">RSVP 전체 삭제</button>
-            <button class="setting-btn danger" onclick="clearGb()">방명록 전체 삭제</button>
-            <button class="setting-btn danger" onclick="resetOrder()">갤러리 순서 초기화</button>
+          <div class="setting-lbl">데이터 초기화</div>
+          <div class="btn-row">
+            <button class="btn btn-red" onclick="clearRsvp()">RSVP 삭제</button>
+            <button class="btn btn-red" onclick="clearGb()">방명록 삭제</button>
+            <button class="btn btn-red" onclick="resetGallery()">갤러리 초기화</button>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-/* ════════════════════════════════════
-   CONFIG
-════════════════════════════════════ */
-// TODO: 비밀번호 변경 시 여기서도 수정 (초기값)
+/* ══════════════════════════════════════════
+   DEFAULT DATA — 기본값 (index.html과 동일)
+══════════════════════════════════════════ */
 const DEFAULT_PW = 'wedding2026';
 
-// 갤러리 이미지 (순서 변경 가능)
-const ALL_IMAGES = [
+const DEFAULT_GALLERY = [
   '모바일 청첩장 사진/갤러리 이미지 1.JPG',
   '모바일 청첩장 사진/갤러리 이미지 2.JPG',
   '모바일 청첩장 사진/갤러리 이미지 3.JPG',
@@ -361,192 +354,370 @@ const ALL_IMAGES = [
   '모바일 청첩장 사진/갤러리 이미지 8.JPG',
 ];
 
-/* ════════════════════════════════════
+const DEFAULT_CONTACT = {
+  groom:[
+    {relation:'신랑',      name:'권용식', phone:'010-2978-7609'},
+    {relation:'신랑 아버지', name:'권순철', phone:'010-0000-0002'},
+    {relation:'신랑 어머니', name:'김정미', phone:'010-0000-0003'},
+  ],
+  bride:[
+    {relation:'신부',      name:'이유리', phone:'010-2430-0262'},
+    {relation:'신부 아버지', name:'이충섭', phone:'010-0000-0005'},
+    {relation:'신부 어머니', name:'강랑',   phone:'010-0000-0006'},
+  ]
+};
+
+const DEFAULT_ACCOUNT = {
+  groom:[
+    {relation:'신랑',       name:'권용식', bank:'카카오뱅크', number:'3333-00-0000000'},
+    {relation:'신랑 아버지', name:'권순철', bank:'국민은행',   number:'000000-00-000000'},
+  ],
+  bride:[
+    {relation:'신부',       name:'이유리', bank:'카카오뱅크', number:'3333-00-0000001'},
+    {relation:'신부 아버지', name:'이충섭', bank:'신한은행',   number:'000-000-000000'},
+  ]
+};
+
+/* ══════════════════════════════════════════
+   THEME DATA
+══════════════════════════════════════════ */
+const THEMES = [
+  { id:'original-warm',      name:'오리지널 웜',     bg:'#F7F3EE', dot1:'#B89E82', dot2:'#3D3028', dot3:'#C47E7E',  desc:'현재 디자인 (기본)' },
+  { id:'classic-elegant',    name:'클래식 엘레강트',  bg:'#faf8f5', dot1:'#b8956a', dot2:'#3a3228', dot3:'#d4b896',  desc:'우아한 베이지 골드' },
+  { id:'korean-traditional', name:'한국 전통',        bg:'#FAF6ED', dot1:'#8B2E3B', dot2:'#2C2420', dot3:'#C9A96E',  desc:'전통 한국미' },
+  { id:'luxury-gold',        name:'럭셔리 골드',      bg:'#1a1a2e', dot1:'#d4a574', dot2:'#f0e6d3', dot3:'#e8c9a0',  desc:'다크 럭셔리' },
+  { id:'midnight-navy',      name:'미드나잇 네이비',  bg:'#0a1628', dot1:'#d4c5a0', dot2:'#e8ecf2', dot3:'#4a6fa5',  desc:'딥 네이비 감성' },
+  { id:'modern-minimal',     name:'모던 미니멀',      bg:'#ffffff', dot1:'#222222', dot2:'#888888', dot3:'#cccccc',  desc:'깔끔한 미니멀' },
+  { id:'nature-green',       name:'네이처 그린',      bg:'#FAFAF5', dot1:'#8B9E7E', dot2:'#4A5E3B', dot3:'#8B7355',  desc:'자연 초록 감성' },
+  { id:'pastel-dream',       name:'파스텔 드림',      bg:'#FFF9FB', dot1:'#FFB5C2', dot2:'#5a4a52', dot3:'#B5D8FF',  desc:'부드러운 파스텔' },
+  { id:'romantic-flower',    name:'로맨틱 플라워',    bg:'#FFF5F6', dot1:'#E8758A', dot2:'#3d2b2b', dot3:'#F4A7B5',  desc:'꽃 로맨틱' },
+  { id:'simple-clean',       name:'심플 클린',        bg:'#ffffff', dot1:'#333333', dot2:'#888888', dot3:'#dddddd',  desc:'깨끗한 화이트' },
+  { id:'vintage-film',       name:'빈티지 필름',      bg:'#faf5eb', dot1:'#c4956a', dot2:'#2a2520', dot3:'#8b6914',  desc:'필름 느낌 빈티지' },
+  { id:'watercolor-soft',    name:'수채화 소프트',    bg:'#fdfbf8', dot1:'#c4a8d4', dot2:'#4a4a4a', dot3:'#a8c8d4',  desc:'수채화 파스텔' },
+];
+
+/* ══════════════════════════════════════════
    LOGIN
-════════════════════════════════════ */
+══════════════════════════════════════════ */
 function getPw(){ return localStorage.getItem('admin_pw') || DEFAULT_PW; }
 
 function doLogin(){
-  const val = document.getElementById('pw-input').value;
-  if(val === getPw()){
-    localStorage.setItem('admin_logged','1');
+  const v = document.getElementById('pw-inp').value;
+  if(v === getPw()){
+    localStorage.setItem('admin_on','1');
     document.getElementById('login-screen').style.display='none';
     document.getElementById('dashboard').style.display='block';
-    initDashboard();
+    init();
   } else {
     document.getElementById('pw-err').style.display='block';
-    document.getElementById('pw-input').value='';
+    document.getElementById('pw-inp').value='';
   }
 }
-
 function logout(){
-  localStorage.removeItem('admin_logged');
+  localStorage.removeItem('admin_on');
   location.reload();
 }
-
-// 자동 로그인 유지
-if(localStorage.getItem('admin_logged')==='1'){
+if(localStorage.getItem('admin_on')==='1'){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('dashboard').style.display='block';
-  document.addEventListener('DOMContentLoaded', initDashboard);
+  document.addEventListener('DOMContentLoaded', init);
 } else {
-  document.addEventListener('DOMContentLoaded',()=>{
-    document.getElementById('pw-input').focus();
-  });
+  document.addEventListener('DOMContentLoaded',()=>document.getElementById('pw-inp').focus());
 }
 
-/* ════════════════════════════════════
+/* ══════════════════════════════════════════
    TAB
-════════════════════════════════════ */
+══════════════════════════════════════════ */
 function switchTab(name, btn){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
   btn.classList.add('on');
   document.getElementById('panel-'+name).classList.add('on');
-  if(name==='rsvp') renderRsvp();
-  if(name==='guestbook') renderGb();
 }
 
-/* ════════════════════════════════════
+/* ══════════════════════════════════════════
    INIT
-════════════════════════════════════ */
-function initDashboard(){
+══════════════════════════════════════════ */
+function init(){
   renderGallery();
+  renderContactForm();
+  renderAccountForm();
+  renderThemes();
   renderRsvp();
+  renderGb();
 }
 
-/* ════════════════════════════════════
-   GALLERY DRAG & DROP
-════════════════════════════════════ */
-function getOrder(){
-  const saved = localStorage.getItem('gallery_order');
-  return saved ? JSON.parse(saved) : [...ALL_IMAGES];
+/* ══════════════════════════════════════════
+   THEME
+══════════════════════════════════════════ */
+function renderThemes(){
+  const current = localStorage.getItem('chosen_template') || 'original-warm';
+  const el = document.getElementById('theme-grid');
+  el.innerHTML = THEMES.map(t => `
+    <div class="theme-card${t.id===current?' selected':''}" onclick="selectTheme('${t.id}')">
+      <div class="theme-preview" style="background:${t.bg}">
+        <div class="theme-dots">
+          <div class="theme-dot" style="background:${t.dot1}"></div>
+          <div class="theme-dot" style="background:${t.dot2}"></div>
+          <div class="theme-dot" style="background:${t.dot3}"></div>
+        </div>
+        <div class="theme-sample-text" style="color:${t.dot2}">권용식 · 이유리</div>
+        ${t.id===current?`<div class="theme-active-badge">현재 적용중</div>`:''}
+      </div>
+      <div class="theme-check">✓</div>
+      <div class="theme-name">
+        ${t.name}<br>
+        <span style="font-size:10px;color:var(--muted);font-weight:400;">${t.desc}</span>
+      </div>
+    </div>`).join('');
 }
+
+function selectTheme(id){
+  localStorage.setItem('chosen_template', id);
+  renderThemes();
+  toast(`테마가 변경되었습니다: ${THEMES.find(t=>t.id===id)?.name || id} ✦`);
+}
+
+/* ══════════════════════════════════════════
+   GITHUB PHOTO PICKER
+══════════════════════════════════════════ */
+const GH_OWNER = 'yururu422';
+const GH_REPO  = 'Wedding';
+const GH_BRANCH = 'main';
+
+let ghPhotos = []; // {name, raw_url, path} 목록
+let ghSelected = new Set();
+
+async function loadGithubPhotos(){
+  const folder = document.getElementById('gh-folder').value.trim();
+  const grid   = document.getElementById('gh-photo-grid');
+  const loading= document.getElementById('gh-loading');
+  const errEl  = document.getElementById('gh-error');
+  const btn    = document.getElementById('gh-load-btn');
+
+  grid.style.display='none'; loading.style.display='block'; errEl.style.display='none';
+  btn.textContent='불러오는 중...'; btn.disabled=true;
+
+  try {
+    const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${encodeURIComponent(folder)}`;
+    const res = await fetch(url);
+    if(!res.ok) throw new Error(`GitHub API 오류 (${res.status})`);
+    const files = await res.json();
+
+    ghPhotos = files
+      .filter(f => /\.(jpg|jpeg|png|gif|webp)$/i.test(f.name))
+      .map(f => ({
+        name: f.name,
+        raw_url: f.download_url,
+        rel_path: folder + '/' + f.name   // 청첩장에서 쓸 상대경로
+      }));
+
+    if(!ghPhotos.length){ throw new Error('이미지 파일이 없습니다'); }
+
+    // 현재 갤러리에 있는 것들 자동 선택
+    const current = getGallery();
+    ghSelected = new Set(ghPhotos.filter(p => current.some(c => c.includes(p.name))).map(p=>p.name));
+
+    renderGhGrid();
+    loading.style.display='none'; grid.style.display='block';
+    toast(`${ghPhotos.length}개 사진을 불러왔습니다`);
+  } catch(e) {
+    loading.style.display='none';
+    errEl.style.display='block';
+    errEl.textContent = '불러오기 실패: ' + e.message;
+    toast('사진 불러오기 실패');
+  }
+  btn.textContent='📂 불러오기'; btn.disabled=false;
+}
+
+function renderGhGrid(){
+  const el = document.getElementById('gh-grid');
+  el.innerHTML = ghPhotos.map(p => `
+    <div class="g-th${ghSelected.has(p.name)?' gh-sel':''}"
+         onclick="toggleGhPhoto('${p.name}')" style="cursor:pointer;">
+      <img src="${p.raw_url}" alt="${p.name}"
+           onerror="this.parentNode.style.background='#E8E0D5';this.remove()">
+      <div class="g-num">${ghSelected.has(p.name)?'✓':''}</div>
+      <div style="position:absolute;inset:0;border-radius:12px;
+        border:${ghSelected.has(p.name)?'3px solid var(--accent)':'3px solid transparent'};
+        transition:border .15s;pointer-events:none;"></div>
+    </div>`).join('');
+}
+
+function toggleGhPhoto(name){
+  if(ghSelected.has(name)) ghSelected.delete(name);
+  else ghSelected.add(name);
+  renderGhGrid();
+}
+
+function selectAllGhPhotos(){
+  if(ghSelected.size === ghPhotos.length) ghSelected.clear();
+  else ghPhotos.forEach(p => ghSelected.add(p.name));
+  renderGhGrid();
+}
+
+function applyGithubSelection(){
+  if(!ghSelected.size){ toast('선택한 사진이 없습니다'); return; }
+  const ordered = ghPhotos.filter(p => ghSelected.has(p.name)).map(p => p.rel_path);
+  localStorage.setItem('gallery_order', JSON.stringify(ordered));
+  renderGallery();
+  toast(`${ordered.length}개 사진이 갤러리에 적용되었습니다 ✦`);
+}
+
+/* ══════════════════════════════════════════
+   GALLERY
+══════════════════════════════════════════ */
+function getGallery(){ return JSON.parse(localStorage.getItem('gallery_order')||'null') || [...DEFAULT_GALLERY]; }
 
 let dragSrc = null;
-
 function renderGallery(){
-  const grid = document.getElementById('gallery-grid');
-  const order = getOrder();
-  grid.innerHTML = order.map((src,i) => `
-    <div class="g-thumb" draggable="true" data-src="${src}"
-         ondragstart="onDragStart(event)"
-         ondragover="onDragOver(event)"
-         ondrop="onDrop(event)"
-         ondragend="onDragEnd(event)">
-      <img src="${src}" alt="갤러리 ${i+1}"
-           onerror="this.parentNode.style.background='#e8e0d5';this.style.display='none'">
+  const grid = document.getElementById('g-grid');
+  const order = getGallery();
+  grid.innerHTML = order.map((src,i)=>`
+    <div class="g-th" draggable="true" data-src="${src}"
+         ondragstart="dStart(event)" ondragover="dOver(event)"
+         ondrop="dDrop(event)" ondragend="dEnd(event)">
+      <img src="${src}" alt="${i+1}"
+           onerror="this.parentNode.style.background='#E8E0D5';this.remove()">
       <div class="g-num">${i+1}</div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
-
-function onDragStart(e){
-  dragSrc = e.currentTarget;
-  dragSrc.classList.add('dragging');
-  e.dataTransfer.effectAllowed='move';
-}
-function onDragOver(e){
+function dStart(e){ dragSrc=e.currentTarget; dragSrc.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
+function dOver(e){ e.preventDefault(); document.querySelectorAll('.g-th').forEach(t=>t.classList.remove('drag-over')); e.currentTarget.classList.add('drag-over'); }
+function dDrop(e){
   e.preventDefault();
-  e.dataTransfer.dropEffect='move';
-  document.querySelectorAll('.g-thumb').forEach(t=>t.classList.remove('drag-over'));
-  e.currentTarget.classList.add('drag-over');
-}
-function onDrop(e){
-  e.preventDefault();
-  const target = e.currentTarget;
-  if(dragSrc === target) return;
-  const order = getOrder();
-  const srcIdx = order.indexOf(dragSrc.dataset.src);
-  const tgtIdx = order.indexOf(target.dataset.src);
-  [order[srcIdx], order[tgtIdx]] = [order[tgtIdx], order[srcIdx]];
-  localStorage.setItem('gallery_order', JSON.stringify(order));
+  const tgt=e.currentTarget;
+  if(dragSrc===tgt) return;
+  const o=getGallery(), a=o.indexOf(dragSrc.dataset.src), b=o.indexOf(tgt.dataset.src);
+  [o[a],o[b]]=[o[b],o[a]];
+  localStorage.setItem('gallery_order',JSON.stringify(o));
   renderGallery();
 }
-function onDragEnd(e){
-  document.querySelectorAll('.g-thumb').forEach(t=>{
-    t.classList.remove('dragging','drag-over');
-  });
-}
-
-function saveOrder(){
-  const btn = document.getElementById('save-order-btn');
-  btn.textContent='저장됨 ✓';
-  btn.classList.add('saved');
-  toast('갤러리 순서가 저장되었습니다 ✦');
+function dEnd(){ document.querySelectorAll('.g-th').forEach(t=>t.classList.remove('dragging','drag-over')); }
+function saveGalleryOrder(){
+  const btn=document.getElementById('save-g-btn');
+  btn.textContent='저장됨 ✓'; btn.classList.add('saved');
+  toast('갤러리 순서가 저장되었습니다');
   setTimeout(()=>{btn.textContent='순서 저장';btn.classList.remove('saved');},2000);
 }
-function resetOrder(){
-  localStorage.removeItem('gallery_order');
-  renderGallery();
-  toast('갤러리 순서가 초기화되었습니다');
-}
+function resetGallery(){ localStorage.removeItem('gallery_order'); renderGallery(); toast('갤러리 순서가 초기화되었습니다'); }
 
-/* ════════════════════════════════════
-   RSVP
-════════════════════════════════════ */
-function getRsvpList(){ return JSON.parse(localStorage.getItem('rsvp')||'[]'); }
+/* ══════════════════════════════════════════
+   CONTACT
+══════════════════════════════════════════ */
+function getContact(){ return JSON.parse(localStorage.getItem('contact_info')||'null') || JSON.parse(JSON.stringify(DEFAULT_CONTACT)); }
 
-function renderRsvp(){
-  const list = getRsvpList();
-  const el = document.getElementById('rsvp-list');
-
-  // 통계
-  const yes = list.filter(r=>r.attendance==='참석');
-  const totalGuests = yes.reduce((s,r)=>s+(r.guest_count||1),0);
-  document.getElementById('stat-total').textContent = list.length;
-  document.getElementById('stat-yes').textContent = yes.length;
-  document.getElementById('stat-guests').textContent = totalGuests;
-
-  if(!list.length){
-    el.innerHTML='<div class="rsvp-empty">아직 응답이 없습니다</div>';
-    return;
-  }
-  el.innerHTML = [...list].reverse().map((r,i) => {
-    const realIdx = list.length - 1 - i;
-    const isYes = r.attendance==='참석';
-    const d = r.created_at ? new Date(r.created_at).toLocaleDateString('ko-KR') : '';
-    return `<div class="rsvp-item">
-      <div class="r-name">
-        ${esc(r.name)}
-        <span class="att-badge ${isYes?'yes':'no'}">${r.attendance||'참석'}</span>
-        <span style="font-size:11px;color:var(--muted);font-weight:300;margin-left:4px;">${r.side||''}</span>
+function renderContactForm(){
+  const data = getContact();
+  const el = document.getElementById('contact-form');
+  el.innerHTML = ['groom','bride'].map(side=>{
+    const label = side==='groom' ? '신랑측' : '신부측';
+    return `<div class="content-section">
+      <div class="content-section-title">${label}</div>
+      <div class="person-grid">
+        ${data[side].map((p,i)=>`
+          <div class="person-row">
+            <div class="person-label">${p.relation}</div>
+            <div class="field-grid">
+              <div class="field"><label>이름</label><input type="text" id="c-${side}-${i}-name" value="${esc(p.name)}" placeholder="이름"></div>
+              <div class="field"><label>전화번호</label><input type="tel" id="c-${side}-${i}-phone" value="${esc(p.phone)}" placeholder="010-0000-0000"></div>
+            </div>
+          </div>`).join('')}
       </div>
-      <div class="rsvp-meta">👥 <span>${r.guest_count||1}명</span></div>
-      <div class="rsvp-meta">🍽 식사: <span>${r.meal_preference||'미정'}</span></div>
-      ${r.companion?`<div class="rsvp-meta" style="grid-column:1/-1">👤 동행: <span>${esc(r.companion)}</span></div>`:''}
-      ${d?`<div class="rsvp-meta"style="grid-column:1/-1;color:#bbb;">${d}</div>`:''}
-      <button class="rsvp-del" onclick="delRsvp(${realIdx})">삭제</button>
     </div>`;
   }).join('');
 }
 
-function delRsvp(idx){
-  const list = getRsvpList();
-  list.splice(idx,1);
-  localStorage.setItem('rsvp', JSON.stringify(list));
-  renderRsvp();
-  toast('삭제되었습니다');
+function saveContact(){
+  const data = getContact();
+  ['groom','bride'].forEach(side=>{
+    data[side].forEach((p,i)=>{
+      p.name  = document.getElementById(`c-${side}-${i}-name`)?.value?.trim() || p.name;
+      p.phone = document.getElementById(`c-${side}-${i}-phone`)?.value?.trim() || p.phone;
+    });
+  });
+  localStorage.setItem('contact_info', JSON.stringify(data));
+  toast('연락처가 저장되었습니다 ✦');
 }
-function clearRsvp(){
-  if(!confirm('RSVP 전체를 삭제할까요?')) return;
-  localStorage.removeItem('rsvp');
-  renderRsvp();
-  toast('RSVP 전체 삭제됨');
+function resetContact(){ localStorage.removeItem('contact_info'); renderContactForm(); toast('연락처가 기본값으로 초기화되었습니다'); }
+
+/* ══════════════════════════════════════════
+   ACCOUNT
+══════════════════════════════════════════ */
+function getAccount(){ return JSON.parse(localStorage.getItem('account_info')||'null') || JSON.parse(JSON.stringify(DEFAULT_ACCOUNT)); }
+
+function renderAccountForm(){
+  const data = getAccount();
+  const el = document.getElementById('account-form');
+  el.innerHTML = ['groom','bride'].map(side=>{
+    const label = side==='groom' ? '신랑측' : '신부측';
+    return `<div class="content-section">
+      <div class="content-section-title">${label}</div>
+      <div class="person-grid">
+        ${data[side].map((a,i)=>`
+          <div class="person-row">
+            <div class="person-label">${a.relation}</div>
+            <div class="field-grid">
+              <div class="field"><label>예금주</label><input type="text" id="a-${side}-${i}-name" value="${esc(a.name)}" placeholder="예금주"></div>
+              <div class="field"><label>은행</label><input type="text" id="a-${side}-${i}-bank" value="${esc(a.bank)}" placeholder="카카오뱅크"></div>
+              <div class="field" style="grid-column:1/-1"><label>계좌번호</label><input type="text" id="a-${side}-${i}-number" value="${esc(a.number)}" placeholder="000-0000-0000"></div>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
 }
 
-/* ════════════════════════════════════
+function saveAccount(){
+  const data = getAccount();
+  ['groom','bride'].forEach(side=>{
+    data[side].forEach((a,i)=>{
+      a.name   = document.getElementById(`a-${side}-${i}-name`)?.value?.trim() || a.name;
+      a.bank   = document.getElementById(`a-${side}-${i}-bank`)?.value?.trim() || a.bank;
+      a.number = document.getElementById(`a-${side}-${i}-number`)?.value?.trim() || a.number;
+    });
+  });
+  localStorage.setItem('account_info', JSON.stringify(data));
+  toast('계좌 정보가 저장되었습니다 ✦');
+}
+function resetAccount(){ localStorage.removeItem('account_info'); renderAccountForm(); toast('계좌 정보가 기본값으로 초기화되었습니다'); }
+
+/* ══════════════════════════════════════════
+   RSVP
+══════════════════════════════════════════ */
+function getRsvp(){ return JSON.parse(localStorage.getItem('rsvp')||'[]'); }
+function renderRsvp(){
+  const list = getRsvp();
+  const yes = list.filter(r=>r.attendance==='참석');
+  document.getElementById('stat-total').textContent = list.length;
+  document.getElementById('stat-yes').textContent = yes.length;
+  document.getElementById('stat-guests').textContent = yes.reduce((s,r)=>s+(r.guest_count||1),0);
+  const el = document.getElementById('rsvp-list');
+  if(!list.length){ el.innerHTML='<div class="empty">아직 응답이 없습니다</div>'; return; }
+  el.innerHTML = [...list].reverse().map((r,i)=>{
+    const ri = list.length-1-i;
+    const d = r.created_at ? new Date(r.created_at).toLocaleDateString('ko-KR') : '';
+    return `<div class="rsvp-item">
+      <div class="r-name">${esc(r.name)}<span class="att ${r.attendance==='참석'?'y':'n'}">${r.attendance||'참석'}</span><span style="font-size:11px;color:var(--muted);">${r.side||''}</span></div>
+      <div class="r-meta">👥 인원 <b>${r.guest_count||1}명</b></div>
+      <div class="r-meta">🍽 식사 <b>${r.meal_preference||'미정'}</b></div>
+      ${r.companion?`<div class="r-meta" style="grid-column:1/-1">👤 동행 <b>${esc(r.companion)}</b></div>`:''}
+      ${d?`<div class="r-meta" style="grid-column:1/-1;color:#bbb;">${d}</div>`:''}
+      <button class="r-del" onclick="delRsvp(${ri})">삭제</button>
+    </div>`;
+  }).join('');
+}
+function delRsvp(i){ const l=getRsvp(); l.splice(i,1); localStorage.setItem('rsvp',JSON.stringify(l)); renderRsvp(); toast('삭제되었습니다'); }
+function clearRsvp(){ if(!confirm('RSVP 전체를 삭제할까요?')) return; localStorage.removeItem('rsvp'); renderRsvp(); toast('전체 삭제됨'); }
+
+/* ══════════════════════════════════════════
    GUESTBOOK
-════════════════════════════════════ */
-function getGbList(){ return JSON.parse(localStorage.getItem('guestbook')||'[]'); }
-
+══════════════════════════════════════════ */
+function getGb(){ return JSON.parse(localStorage.getItem('guestbook')||'[]'); }
 function renderGb(){
-  const list = getGbList();
-  const el = document.getElementById('gb-list');
-  if(!list.length){
-    el.innerHTML='<div class="gb-empty" style="grid-column:1/-1">아직 메시지가 없습니다</div>';
-    return;
-  }
+  const list = getGb();
+  const el = document.getElementById('gb-grid');
+  if(!list.length){ el.innerHTML='<div class="empty" style="grid-column:1/-1">아직 메시지가 없습니다</div>'; return; }
   el.innerHTML = list.map((m,i)=>{
     const d = m.created_at ? new Date(m.created_at).toLocaleDateString('ko-KR') : '';
     return `<div class="gb-item">
@@ -557,47 +728,29 @@ function renderGb(){
     </div>`;
   }).join('');
 }
+function delGb(i){ const l=getGb(); l.splice(i,1); localStorage.setItem('guestbook',JSON.stringify(l)); renderGb(); toast('삭제되었습니다'); }
+function clearGb(){ if(!confirm('방명록 전체를 삭제할까요?')) return; localStorage.removeItem('guestbook'); renderGb(); toast('전체 삭제됨'); }
 
-function delGb(idx){
-  const list = getGbList();
-  list.splice(idx,1);
-  localStorage.setItem('guestbook', JSON.stringify(list));
-  renderGb();
-  toast('메시지가 삭제되었습니다');
-}
-function clearGb(){
-  if(!confirm('방명록 전체를 삭제할까요?')) return;
-  localStorage.removeItem('guestbook');
-  renderGb();
-  toast('방명록 전체 삭제됨');
-}
-
-/* ════════════════════════════════════
+/* ══════════════════════════════════════════
    SETTINGS
-════════════════════════════════════ */
+══════════════════════════════════════════ */
 function changePw(){
-  const p1 = document.getElementById('new-pw').value;
-  const p2 = document.getElementById('new-pw2').value;
-  if(!p1){ toast('비밀번호를 입력해주세요'); return; }
-  if(p1 !== p2){ toast('비밀번호가 일치하지 않습니다'); return; }
-  localStorage.setItem('admin_pw', p1);
-  document.getElementById('new-pw').value='';
+  const p1=document.getElementById('new-pw1').value;
+  const p2=document.getElementById('new-pw2').value;
+  if(!p1){toast('비밀번호를 입력해주세요');return;}
+  if(p1!==p2){toast('비밀번호가 일치하지 않습니다');return;}
+  localStorage.setItem('admin_pw',p1);
+  document.getElementById('new-pw1').value='';
   document.getElementById('new-pw2').value='';
   toast('비밀번호가 변경되었습니다 ✦');
 }
 
-/* ════════════════════════════════════
+/* ══════════════════════════════════════════
    UTILS
-════════════════════════════════════ */
-function esc(s){
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-}
+══════════════════════════════════════════ */
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
 let _tt;
-function toast(msg){
-  const t = document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),2500);
-}
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),2500); }
 </script>
 </body>
 </html>
