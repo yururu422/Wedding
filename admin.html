@@ -473,7 +473,12 @@ function renderThemes(){
       <div class="theme-check">✓</div>
       <div class="theme-name">
         ${t.name}<br>
-        <span style="font-size:10px;color:var(--muted);font-weight:400;">${t.desc}</span>
+        <span style="font-size:10px;color:var(--muted);font-weight:400;">${t.desc}</span><br>
+        <button onclick="event.stopPropagation();copyThemeLink('${t.id}')"
+          style="margin-top:6px;padding:4px 10px;border:1px solid var(--border);border-radius:50px;
+          background:var(--bg);color:var(--muted);font-size:10px;cursor:pointer;font-family:var(--sans);">
+          🔗 링크 복사
+        </button>
       </div>
     </div>`).join('');
 }
@@ -482,6 +487,12 @@ function selectTheme(id){
   localStorage.setItem('chosen_template', id);
   renderThemes();
   toast(`테마가 변경되었습니다: ${THEMES.find(t=>t.id===id)?.name || id} ✦`);
+}
+
+function copyThemeLink(id){
+  const base = location.origin + location.pathname.replace('admin.html','');
+  const link = base + id + '/index.html';
+  navigator.clipboard.writeText(link).then(()=>toast('공유 링크가 복사되었습니다 🔗'));
 }
 
 /* ══════════════════════════════════════════
