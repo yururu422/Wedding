@@ -603,26 +603,8 @@ section.visible{opacity:1;transform:translateY(0);}
 <section id="gallery">
   <p class="sec-title">Gallery</p>
   <h2 class="sec-title-kr">갤러리</h2>
-  <div class="g-track" id="g-track">
-    <div class="g-item"><img src="모바일 청첩장 사진/갤러리 이미지 1.JPG" alt="갤러리 1" onerror="this.parentNode.innerHTML='<div class=\'g-ph\'><div class=\'ico\'>🖼️</div><span>갤러리 1</span></div>'"></div>
-    <div class="g-item"><img src="모바일 청첩장 사진/갤러리 이미지 2.JPG" alt="갤러리 2" onerror="this.parentNode.innerHTML='<div class=\'g-ph\'><div class=\'ico\'>🖼️</div><span>갤러리 2</span></div>'"></div>
-    <div class="g-item"><img src="모바일 청첩장 사진/갤러리 이미지 3.JPG" alt="갤러리 3" onerror="this.parentNode.innerHTML='<div class=\'g-ph\'><div class=\'ico\'>🖼️</div><span>갤러리 3</span></div>'"></div>
-    <div class="g-item"><img src="모바일 청첩장 사진/갤러리 이미지 4.JPG" alt="갤러리 4" onerror="this.parentNode.innerHTML='<div class=\'g-ph\'><div class=\'ico\'>🖼️</div><span>갤러리 4</span></div>'"></div>
-    <div class="g-item"><img src="모바일 청첩장 사진/갤러리 이미지 5.JPG" alt="갤러리 5" onerror="this.parentNode.innerHTML='<div class=\'g-ph\'><div class=\'ico\'>🖼️</div><span>갤러리 5</span></div>'"></div>
-    <div class="g-item"><img src="모바일 청첩장 사진/갤러리 이미지 6.JPG" alt="갤러리 6" onerror="this.parentNode.innerHTML='<div class=\'g-ph\'><div class=\'ico\'>🖼️</div><span>갤러리 6</span></div>'"></div>
-    <div class="g-item"><img src="모바일 청첩장 사진/갤러리 이미지 7.JPG" alt="갤러리 7" onerror="this.parentNode.innerHTML='<div class=\'g-ph\'><div class=\'ico\'>🖼️</div><span>갤러리 7</span></div>'"></div>
-    <div class="g-item"><img src="모바일 청첩장 사진/갤러리 이미지 8.JPG" alt="갤러리 8" onerror="this.parentNode.innerHTML='<div class=\'g-ph\'><div class=\'ico\'>🖼️</div><span>갤러리 8</span></div>'"></div>
-  </div>
-  <div class="g-dots">
-    <div class="g-dot on"></div>
-    <div class="g-dot"></div>
-    <div class="g-dot"></div>
-    <div class="g-dot"></div>
-    <div class="g-dot"></div>
-    <div class="g-dot"></div>
-    <div class="g-dot"></div>
-    <div class="g-dot"></div>
-  </div>
+  <div class="g-track" id="g-track"></div>
+  <div class="g-dots" id="g-dots"></div>
 </section>
 
 <div class="divider">✦</div>
@@ -965,15 +947,38 @@ setInterval(tick,1000); tick();
 })();
 
 /* ════════════════════════════════════════════
-   GALLERY DOTS
+   GALLERY — localStorage 순서 읽기
 ════════════════════════════════════════════ */
 (function(){
-  const track=document.getElementById('g-track');
-  const dots=document.querySelectorAll('.g-dot');
-  if(!track) return;
+  const DEFAULT_IMGS = [
+    '모바일 청첩장 사진/갤러리 이미지 1.JPG',
+    '모바일 청첩장 사진/갤러리 이미지 2.JPG',
+    '모바일 청첩장 사진/갤러리 이미지 3.JPG',
+    '모바일 청첩장 사진/갤러리 이미지 4.JPG',
+    '모바일 청첩장 사진/갤러리 이미지 5.JPG',
+    '모바일 청첩장 사진/갤러리 이미지 6.JPG',
+    '모바일 청첩장 사진/갤러리 이미지 7.JPG',
+    '모바일 청첩장 사진/갤러리 이미지 8.JPG',
+  ];
+  const saved = localStorage.getItem('gallery_order');
+  const imgs = saved ? JSON.parse(saved) : DEFAULT_IMGS;
+
+  const track = document.getElementById('g-track');
+  const dotsEl = document.getElementById('g-dots');
+
+  track.innerHTML = imgs.map((src,i) =>
+    `<div class="g-item"><img src="${src}" alt="갤러리 ${i+1}"
+      onerror="this.parentNode.innerHTML='<div class=\\'g-ph\\'><div class=\\'ico\\'>🖼️</div></div>'"></div>`
+  ).join('');
+
+  dotsEl.innerHTML = imgs.map((_,i) =>
+    `<div class="g-dot${i===0?' on':''}"></div>`
+  ).join('');
+
+  const dots = dotsEl.querySelectorAll('.g-dot');
   track.addEventListener('scroll',()=>{
-    const idx=Math.round(track.scrollLeft/(track.scrollWidth/3));
-    dots.forEach((d,i)=>d.classList.toggle('on',i===idx));
+    const idx = Math.round(track.scrollLeft / (track.scrollWidth / imgs.length));
+    dots.forEach((d,i) => d.classList.toggle('on', i===idx));
   });
 })();
 

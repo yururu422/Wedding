@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>관리자 — 권용식 ❤️ 이유리</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:     #F7F3EE;
+      --accent: #B89E82;
+      --text:   #3D3028;
+      --muted:  #9A8878;
+      --border: rgba(184,158,130,.22);
+      --card:   #fff;
+      --red:    #C47E7E;
+      --green:  #7EAF8A;
+      --sans:   'Noto Sans KR', sans-serif;
+      --eng:    'Cormorant Garamond', serif;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      background:var(--bg);
+      background-image:radial-gradient(circle,rgba(184,158,130,.1) 1px,transparent 1px);
+      background-size:24px 24px;
+      font-family:var(--sans);color:var(--text);min-height:100vh;
+    }
+
+    /* ── 로그인 화면 ── */
+    #login-screen{
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      min-height:100vh;padding:24px;
+    }
+    .login-box{
+      background:#fff;border-radius:24px;padding:48px 36px;
+      box-shadow:0 4px 40px rgba(184,158,130,.15);
+      width:100%;max-width:360px;text-align:center;
+    }
+    .login-title{font-family:var(--eng);font-size:13px;font-weight:300;color:var(--muted);letter-spacing:5px;text-transform:uppercase;margin-bottom:8px;}
+    .login-sub{font-size:20px;color:var(--text);margin-bottom:36px;}
+    .login-input{
+      width:100%;padding:14px 18px;border:1px solid var(--border);
+      border-radius:12px;font-size:18px;text-align:center;
+      letter-spacing:6px;outline:none;background:var(--bg);
+      color:var(--text);font-family:var(--sans);transition:border .2s;
+    }
+    .login-input:focus{border-color:var(--accent);}
+    .login-btn{
+      width:100%;margin-top:16px;padding:14px;
+      background:var(--text);color:#fff;border:none;border-radius:12px;
+      font-size:15px;font-family:var(--sans);cursor:pointer;transition:opacity .2s;
+    }
+    .login-btn:hover{opacity:.88;}
+    .login-err{font-size:13px;color:var(--red);margin-top:12px;display:none;}
+
+    /* ── 대시보드 ── */
+    #dashboard{display:none;}
+    .top-bar{
+      background:#fff;border-bottom:1px solid var(--border);
+      padding:16px 24px;display:flex;align-items:center;justify-content:space-between;
+      position:sticky;top:0;z-index:100;
+    }
+    .top-title{font-family:var(--eng);font-size:18px;font-weight:300;color:var(--text);}
+    .top-sub{font-size:11px;color:var(--muted);letter-spacing:2px;}
+    .logout-btn{
+      padding:8px 16px;border:1px solid var(--border);border-radius:50px;
+      background:none;font-size:12px;color:var(--muted);cursor:pointer;font-family:var(--sans);
+      transition:all .2s;
+    }
+    .logout-btn:hover{background:var(--bg);}
+
+    .content{max-width:900px;margin:0 auto;padding:32px 24px;}
+
+    /* ── 탭 ── */
+    .tabs{display:flex;gap:4px;margin-bottom:32px;background:#fff;border-radius:14px;padding:4px;box-shadow:0 2px 16px rgba(184,158,130,.1);}
+    .tab{
+      flex:1;padding:10px;border:none;border-radius:10px;
+      background:none;font-size:13px;font-family:var(--sans);
+      color:var(--muted);cursor:pointer;transition:all .2s;
+    }
+    .tab.on{background:var(--text);color:#fff;}
+
+    .panel{display:none;}
+    .panel.on{display:block;}
+
+    /* ── 섹션 카드 ── */
+    .sec-card{background:#fff;border-radius:20px;padding:28px;box-shadow:0 2px 20px rgba(184,158,130,.1);margin-bottom:20px;}
+    .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+    .sec-label{font-family:var(--eng);font-size:11px;font-weight:300;color:var(--muted);letter-spacing:4px;text-transform:uppercase;}
+    .sec-title{font-size:18px;color:var(--text);margin-top:4px;}
+    .badge{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-width:28px;height:28px;border-radius:50%;
+      background:var(--accent);color:#fff;font-size:12px;font-weight:700;
+    }
+
+    /* ── 갤러리 드래그 ── */
+    .gallery-hint{font-size:12px;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:6px;}
+    .gallery-grid{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+    }
+    .g-thumb{
+      aspect-ratio:3/4;border-radius:12px;overflow:hidden;
+      cursor:grab;position:relative;
+      box-shadow:0 2px 12px rgba(184,158,130,.15);
+      transition:transform .2s,box-shadow .2s;
+      user-select:none;
+    }
+    .g-thumb:hover{transform:scale(1.02);box-shadow:0 4px 20px rgba(184,158,130,.25);}
+    .g-thumb.dragging{opacity:.5;transform:scale(0.97);cursor:grabbing;}
+    .g-thumb.drag-over{border:2px dashed var(--accent);}
+    .g-thumb img{width:100%;height:100%;object-fit:cover;pointer-events:none;}
+    .g-num{
+      position:absolute;top:6px;left:6px;
+      background:rgba(61,48,40,.6);color:#fff;
+      border-radius:6px;padding:2px 7px;font-size:11px;
+    }
+    .save-order-btn{
+      margin-top:16px;padding:12px 28px;
+      background:var(--text);color:#fff;border:none;border-radius:12px;
+      font-size:14px;font-family:var(--sans);cursor:pointer;transition:opacity .2s;
+    }
+    .save-order-btn:hover{opacity:.88;}
+    .save-order-btn.saved{background:var(--green);}
+
+    /* ── RSVP 테이블 ── */
+    .rsvp-empty,.gb-empty{text-align:center;color:var(--muted);font-size:13px;padding:40px 0;}
+    .rsvp-list{display:flex;flex-direction:column;gap:10px;}
+    .rsvp-item{
+      background:var(--bg);border-radius:14px;padding:16px 18px;
+      display:grid;grid-template-columns:1fr 1fr;gap:6px;
+    }
+    .rsvp-item .r-name{font-size:15px;font-weight:500;color:var(--text);grid-column:1/-1;}
+    .rsvp-meta{font-size:12px;color:var(--muted);}
+    .rsvp-meta span{color:var(--text);font-weight:500;}
+    .att-badge{
+      display:inline-block;padding:2px 10px;border-radius:50px;font-size:11px;font-weight:700;
+      margin-left:6px;
+    }
+    .att-badge.yes{background:rgba(126,175,138,.15);color:#5a9168;}
+    .att-badge.no{background:rgba(196,126,126,.15);color:#a05050;}
+    .rsvp-del{
+      background:none;border:1px solid var(--border);border-radius:8px;
+      padding:4px 10px;font-size:11px;color:var(--muted);cursor:pointer;
+      font-family:var(--sans);transition:all .2s;grid-column:1/-1;justify-self:end;
+    }
+    .rsvp-del:hover{background:var(--red);color:#fff;border-color:var(--red);}
+
+    /* ── 방명록 ── */
+    .gb-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .gb-item{
+      background:var(--bg);border-radius:12px;padding:14px;
+      position:relative;
+    }
+    .gb-author{font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px;}
+    .gb-msg{font-size:13px;color:var(--muted);line-height:1.6;word-break:break-word;}
+    .gb-date{font-size:10px;color:#bbb;margin-top:8px;}
+    .gb-del{
+      position:absolute;top:10px;right:10px;
+      background:none;border:none;color:#ccc;cursor:pointer;font-size:14px;
+      transition:color .2s;
+    }
+    .gb-del:hover{color:var(--red);}
+
+    /* ── 설정 ── */
+    .setting-row{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;}
+    .setting-label{font-size:12px;color:var(--muted);letter-spacing:1px;}
+    .setting-input{
+      padding:12px 14px;border:1px solid var(--border);border-radius:10px;
+      font-size:14px;font-family:var(--sans);outline:none;background:var(--bg);
+      color:var(--text);transition:border .2s;
+    }
+    .setting-input:focus{border-color:var(--accent);}
+    .setting-btn{
+      padding:12px 24px;background:var(--text);color:#fff;
+      border:none;border-radius:10px;font-size:14px;font-family:var(--sans);
+      cursor:pointer;transition:opacity .2s;
+    }
+    .setting-btn:hover{opacity:.88;}
+    .setting-btn.danger{background:var(--red);}
+
+    /* ── 통계 카드 ── */
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+    .stat-box{background:#fff;border-radius:16px;padding:20px;box-shadow:0 2px 12px rgba(184,158,130,.1);text-align:center;}
+    .stat-num{font-family:var(--eng);font-size:36px;font-weight:300;color:var(--accent);}
+    .stat-lbl{font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:1px;}
+
+    /* ── 청첩장 바로가기 ── */
+    .go-main{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:10px 20px;border:1px solid var(--border);border-radius:50px;
+      text-decoration:none;color:var(--text);font-size:13px;
+      transition:all .2s;background:#fff;
+    }
+    .go-main:hover{background:var(--bg);}
+
+    /* toast */
+    .toast{
+      position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(16px);
+      background:rgba(61,48,40,.9);color:#fff;padding:10px 24px;
+      border-radius:50px;font-size:13px;opacity:0;transition:all .3s;
+      pointer-events:none;z-index:9999;white-space:nowrap;
+    }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+    @media(max-width:600px){
+      .gallery-grid{grid-template-columns:repeat(3,1fr);}
+      .gb-list{grid-template-columns:1fr;}
+      .stats{grid-template-columns:repeat(3,1fr);}
+      .stat-num{font-size:26px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════ 로그인 ════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-title">Admin</div>
+    <div class="login-sub">관리자 페이지</div>
+    <input class="login-input" type="password" id="pw-input" placeholder="••••"
+           maxlength="20" onkeydown="if(event.key==='Enter') doLogin()">
+    <button class="login-btn" onclick="doLogin()">입장</button>
+    <div class="login-err" id="pw-err">비밀번호가 틀렸어요</div>
+  </div>
+</div>
+
+<!-- ════ 대시보드 ════ -->
+<div id="dashboard">
+
+  <div class="top-bar">
+    <div>
+      <div class="top-title">Wedding Admin</div>
+      <div class="top-sub">권용식 ❤️ 이유리 · 2026.11.28</div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <a class="go-main" href="index.html" target="_blank">🔗 청첩장 보기</a>
+      <button class="logout-btn" onclick="logout()">로그아웃</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- 탭 -->
+    <div class="tabs">
+      <button class="tab on" onclick="switchTab('gallery',this)">🖼 갤러리</button>
+      <button class="tab" onclick="switchTab('rsvp',this)">✉️ 참석여부</button>
+      <button class="tab" onclick="switchTab('guestbook',this)">💌 방명록</button>
+      <button class="tab" onclick="switchTab('settings',this)">⚙️ 설정</button>
+    </div>
+
+    <!-- ── 갤러리 패널 ── -->
+    <div class="panel on" id="panel-gallery">
+      <div class="sec-card">
+        <div class="sec-head">
+          <div>
+            <div class="sec-label">Gallery</div>
+            <div class="sec-title">갤러리 순서 관리</div>
+          </div>
+        </div>
+        <div class="gallery-hint">✦ 사진을 드래그해서 순서를 바꾸세요</div>
+        <div class="gallery-grid" id="gallery-grid"></div>
+        <button class="save-order-btn" id="save-order-btn" onclick="saveOrder()">순서 저장</button>
+        <button class="save-order-btn" style="margin-left:10px;background:var(--bg);color:var(--text);border:1px solid var(--border);" onclick="resetOrder()">초기화</button>
+      </div>
+    </div>
+
+    <!-- ── RSVP 패널 ── -->
+    <div class="panel" id="panel-rsvp">
+      <!-- 통계 -->
+      <div class="stats">
+        <div class="stat-box">
+          <div class="stat-num" id="stat-total">0</div>
+          <div class="stat-lbl">총 응답</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="stat-yes">0</div>
+          <div class="stat-lbl">참석</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="stat-guests">0</div>
+          <div class="stat-lbl">총 인원</div>
+        </div>
+      </div>
+      <div class="sec-card">
+        <div class="sec-head">
+          <div>
+            <div class="sec-label">RSVP</div>
+            <div class="sec-title">참석 의사 목록</div>
+          </div>
+          <button onclick="clearRsvp()" style="padding:8px 14px;border:1px solid var(--border);border-radius:50px;background:none;font-size:12px;color:var(--muted);cursor:pointer;font-family:var(--sans);">전체 삭제</button>
+        </div>
+        <div class="rsvp-list" id="rsvp-list"></div>
+      </div>
+    </div>
+
+    <!-- ── 방명록 패널 ── -->
+    <div class="panel" id="panel-guestbook">
+      <div class="sec-card">
+        <div class="sec-head">
+          <div>
+            <div class="sec-label">Guestbook</div>
+            <div class="sec-title">축하 메시지 목록</div>
+          </div>
+          <button onclick="clearGb()" style="padding:8px 14px;border:1px solid var(--border);border-radius:50px;background:none;font-size:12px;color:var(--muted);cursor:pointer;font-family:var(--sans);">전체 삭제</button>
+        </div>
+        <div class="gb-list" id="gb-list"></div>
+      </div>
+    </div>
+
+    <!-- ── 설정 패널 ── -->
+    <div class="panel" id="panel-settings">
+      <div class="sec-card">
+        <div class="sec-head"><div>
+          <div class="sec-label">Settings</div>
+          <div class="sec-title">관리자 설정</div>
+        </div></div>
+
+        <div class="setting-row">
+          <div class="setting-label">관리자 비밀번호 변경</div>
+          <input class="setting-input" type="password" id="new-pw" placeholder="새 비밀번호 입력">
+          <input class="setting-input" type="password" id="new-pw2" placeholder="새 비밀번호 확인" style="margin-top:8px;">
+          <button class="setting-btn" onclick="changePw()" style="margin-top:8px;width:fit-content;">비밀번호 변경</button>
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;">
+
+        <div class="setting-row">
+          <div class="setting-label">데이터 초기화</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="setting-btn danger" onclick="clearRsvp()">RSVP 전체 삭제</button>
+            <button class="setting-btn danger" onclick="clearGb()">방명록 전체 삭제</button>
+            <button class="setting-btn danger" onclick="resetOrder()">갤러리 순서 초기화</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ════════════════════════════════════
+   CONFIG
+════════════════════════════════════ */
+// TODO: 비밀번호 변경 시 여기서도 수정 (초기값)
+const DEFAULT_PW = 'wedding2026';
+
+// 갤러리 이미지 (순서 변경 가능)
+const ALL_IMAGES = [
+  '모바일 청첩장 사진/갤러리 이미지 1.JPG',
+  '모바일 청첩장 사진/갤러리 이미지 2.JPG',
+  '모바일 청첩장 사진/갤러리 이미지 3.JPG',
+  '모바일 청첩장 사진/갤러리 이미지 4.JPG',
+  '모바일 청첩장 사진/갤러리 이미지 5.JPG',
+  '모바일 청첩장 사진/갤러리 이미지 6.JPG',
+  '모바일 청첩장 사진/갤러리 이미지 7.JPG',
+  '모바일 청첩장 사진/갤러리 이미지 8.JPG',
+];
+
+/* ════════════════════════════════════
+   LOGIN
+════════════════════════════════════ */
+function getPw(){ return localStorage.getItem('admin_pw') || DEFAULT_PW; }
+
+function doLogin(){
+  const val = document.getElementById('pw-input').value;
+  if(val === getPw()){
+    localStorage.setItem('admin_logged','1');
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+    initDashboard();
+  } else {
+    document.getElementById('pw-err').style.display='block';
+    document.getElementById('pw-input').value='';
+  }
+}
+
+function logout(){
+  localStorage.removeItem('admin_logged');
+  location.reload();
+}
+
+// 자동 로그인 유지
+if(localStorage.getItem('admin_logged')==='1'){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  document.addEventListener('DOMContentLoaded', initDashboard);
+} else {
+  document.addEventListener('DOMContentLoaded',()=>{
+    document.getElementById('pw-input').focus();
+  });
+}
+
+/* ════════════════════════════════════
+   TAB
+════════════════════════════════════ */
+function switchTab(name, btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('panel-'+name).classList.add('on');
+  if(name==='rsvp') renderRsvp();
+  if(name==='guestbook') renderGb();
+}
+
+/* ════════════════════════════════════
+   INIT
+════════════════════════════════════ */
+function initDashboard(){
+  renderGallery();
+  renderRsvp();
+}
+
+/* ════════════════════════════════════
+   GALLERY DRAG & DROP
+════════════════════════════════════ */
+function getOrder(){
+  const saved = localStorage.getItem('gallery_order');
+  return saved ? JSON.parse(saved) : [...ALL_IMAGES];
+}
+
+let dragSrc = null;
+
+function renderGallery(){
+  const grid = document.getElementById('gallery-grid');
+  const order = getOrder();
+  grid.innerHTML = order.map((src,i) => `
+    <div class="g-thumb" draggable="true" data-src="${src}"
+         ondragstart="onDragStart(event)"
+         ondragover="onDragOver(event)"
+         ondrop="onDrop(event)"
+         ondragend="onDragEnd(event)">
+      <img src="${src}" alt="갤러리 ${i+1}"
+           onerror="this.parentNode.style.background='#e8e0d5';this.style.display='none'">
+      <div class="g-num">${i+1}</div>
+    </div>
+  `).join('');
+}
+
+function onDragStart(e){
+  dragSrc = e.currentTarget;
+  dragSrc.classList.add('dragging');
+  e.dataTransfer.effectAllowed='move';
+}
+function onDragOver(e){
+  e.preventDefault();
+  e.dataTransfer.dropEffect='move';
+  document.querySelectorAll('.g-thumb').forEach(t=>t.classList.remove('drag-over'));
+  e.currentTarget.classList.add('drag-over');
+}
+function onDrop(e){
+  e.preventDefault();
+  const target = e.currentTarget;
+  if(dragSrc === target) return;
+  const order = getOrder();
+  const srcIdx = order.indexOf(dragSrc.dataset.src);
+  const tgtIdx = order.indexOf(target.dataset.src);
+  [order[srcIdx], order[tgtIdx]] = [order[tgtIdx], order[srcIdx]];
+  localStorage.setItem('gallery_order', JSON.stringify(order));
+  renderGallery();
+}
+function onDragEnd(e){
+  document.querySelectorAll('.g-thumb').forEach(t=>{
+    t.classList.remove('dragging','drag-over');
+  });
+}
+
+function saveOrder(){
+  const btn = document.getElementById('save-order-btn');
+  btn.textContent='저장됨 ✓';
+  btn.classList.add('saved');
+  toast('갤러리 순서가 저장되었습니다 ✦');
+  setTimeout(()=>{btn.textContent='순서 저장';btn.classList.remove('saved');},2000);
+}
+function resetOrder(){
+  localStorage.removeItem('gallery_order');
+  renderGallery();
+  toast('갤러리 순서가 초기화되었습니다');
+}
+
+/* ════════════════════════════════════
+   RSVP
+════════════════════════════════════ */
+function getRsvpList(){ return JSON.parse(localStorage.getItem('rsvp')||'[]'); }
+
+function renderRsvp(){
+  const list = getRsvpList();
+  const el = document.getElementById('rsvp-list');
+
+  // 통계
+  const yes = list.filter(r=>r.attendance==='참석');
+  const totalGuests = yes.reduce((s,r)=>s+(r.guest_count||1),0);
+  document.getElementById('stat-total').textContent = list.length;
+  document.getElementById('stat-yes').textContent = yes.length;
+  document.getElementById('stat-guests').textContent = totalGuests;
+
+  if(!list.length){
+    el.innerHTML='<div class="rsvp-empty">아직 응답이 없습니다</div>';
+    return;
+  }
+  el.innerHTML = [...list].reverse().map((r,i) => {
+    const realIdx = list.length - 1 - i;
+    const isYes = r.attendance==='참석';
+    const d = r.created_at ? new Date(r.created_at).toLocaleDateString('ko-KR') : '';
+    return `<div class="rsvp-item">
+      <div class="r-name">
+        ${esc(r.name)}
+        <span class="att-badge ${isYes?'yes':'no'}">${r.attendance||'참석'}</span>
+        <span style="font-size:11px;color:var(--muted);font-weight:300;margin-left:4px;">${r.side||''}</span>
+      </div>
+      <div class="rsvp-meta">👥 <span>${r.guest_count||1}명</span></div>
+      <div class="rsvp-meta">🍽 식사: <span>${r.meal_preference||'미정'}</span></div>
+      ${r.companion?`<div class="rsvp-meta" style="grid-column:1/-1">👤 동행: <span>${esc(r.companion)}</span></div>`:''}
+      ${d?`<div class="rsvp-meta"style="grid-column:1/-1;color:#bbb;">${d}</div>`:''}
+      <button class="rsvp-del" onclick="delRsvp(${realIdx})">삭제</button>
+    </div>`;
+  }).join('');
+}
+
+function delRsvp(idx){
+  const list = getRsvpList();
+  list.splice(idx,1);
+  localStorage.setItem('rsvp', JSON.stringify(list));
+  renderRsvp();
+  toast('삭제되었습니다');
+}
+function clearRsvp(){
+  if(!confirm('RSVP 전체를 삭제할까요?')) return;
+  localStorage.removeItem('rsvp');
+  renderRsvp();
+  toast('RSVP 전체 삭제됨');
+}
+
+/* ════════════════════════════════════
+   GUESTBOOK
+════════════════════════════════════ */
+function getGbList(){ return JSON.parse(localStorage.getItem('guestbook')||'[]'); }
+
+function renderGb(){
+  const list = getGbList();
+  const el = document.getElementById('gb-list');
+  if(!list.length){
+    el.innerHTML='<div class="gb-empty" style="grid-column:1/-1">아직 메시지가 없습니다</div>';
+    return;
+  }
+  el.innerHTML = list.map((m,i)=>{
+    const d = m.created_at ? new Date(m.created_at).toLocaleDateString('ko-KR') : '';
+    return `<div class="gb-item">
+      <button class="gb-del" onclick="delGb(${i})">✕</button>
+      <div class="gb-author">${esc(m.author)}</div>
+      <div class="gb-msg">${esc(m.content)}</div>
+      ${d?`<div class="gb-date">${d}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+function delGb(idx){
+  const list = getGbList();
+  list.splice(idx,1);
+  localStorage.setItem('guestbook', JSON.stringify(list));
+  renderGb();
+  toast('메시지가 삭제되었습니다');
+}
+function clearGb(){
+  if(!confirm('방명록 전체를 삭제할까요?')) return;
+  localStorage.removeItem('guestbook');
+  renderGb();
+  toast('방명록 전체 삭제됨');
+}
+
+/* ════════════════════════════════════
+   SETTINGS
+════════════════════════════════════ */
+function changePw(){
+  const p1 = document.getElementById('new-pw').value;
+  const p2 = document.getElementById('new-pw2').value;
+  if(!p1){ toast('비밀번호를 입력해주세요'); return; }
+  if(p1 !== p2){ toast('비밀번호가 일치하지 않습니다'); return; }
+  localStorage.setItem('admin_pw', p1);
+  document.getElementById('new-pw').value='';
+  document.getElementById('new-pw2').value='';
+  toast('비밀번호가 변경되었습니다 ✦');
+}
+
+/* ════════════════════════════════════
+   UTILS
+════════════════════════════════════ */
+function esc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+let _tt;
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),2500);
+}
+</script>
+</body>
+</html>
