@@ -693,12 +693,12 @@ async function loadGithubPhotos(){
     if(!res.ok) throw new Error(`GitHub API 오류 (${res.status})`);
     const files = await res.json();
 
-    const baseUrl = location.origin + location.pathname.replace('admin.html','');
+    const ghPagesBase = `https://${GH_OWNER}.github.io/${GH_REPO}/`;
     ghPhotos = files
       .filter(f => /\.(jpg|jpeg|png|gif|webp)$/i.test(f.name))
       .map(f => ({
         name: f.name,
-        raw_url: baseUrl + folder + '/' + encodeURIComponent(f.name), // GitHub Pages URL
+        raw_url: ghPagesBase + folder + '/' + encodeURIComponent(f.name), // GitHub Pages URL
         dl_url:  f.download_url,  // 썸네일용 fallback
         rel_path: folder + '/' + f.name
       }));
