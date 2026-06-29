@@ -50,9 +50,12 @@
   /* ── 갤러리 사진 (GitHub raw URL) ── */
   const gallery = JSON.parse(localStorage.getItem('gallery_order') || 'null');
   if (gallery && gallery.length) {
+    var GH_BASE = 'https://yururu422.github.io/Wedding/';
     window.__ADMIN_GALLERY = gallery.map(function (path) {
-      return path.startsWith('http') ? path
-        : 'https://yururu422.github.io/Wedding/' + path;
+      if (path.startsWith('http')) return path;
+      // 깨진 URL에서 파일명만 추출해 복구
+      var name = decodeURIComponent(path.split('/').pop());
+      return GH_BASE + 'photos/' + encodeURIComponent(name);
     });
   }
 
