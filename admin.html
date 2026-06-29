@@ -614,7 +614,8 @@ function selectAllGhPhotos(){
 
 function applyGithubSelection(){
   if(!ghSelected.size){ toast('선택한 사진이 없습니다'); return; }
-  const ordered = ghPhotos.filter(p => ghSelected.has(p.name)).map(p => p.rel_path);
+  // 절대 URL로 저장 → 어느 템플릿 폴더에서든 작동
+  const ordered = ghPhotos.filter(p => ghSelected.has(p.name)).map(p => p.raw_url);
   localStorage.setItem('gallery_order', JSON.stringify(ordered));
   renderGallery();
   toast(`${ordered.length}개 사진이 갤러리에 적용되었습니다 ✦`);

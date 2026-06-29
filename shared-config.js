@@ -32,7 +32,8 @@
   const gallery = JSON.parse(localStorage.getItem('gallery_order') || 'null');
   if (gallery && gallery.length) {
     window.__ADMIN_GALLERY = gallery.map(function (path) {
-      return 'https://raw.githubusercontent.com/yururu422/Wedding/main/' + path;
+      return path.startsWith('http') ? path
+        : 'https://raw.githubusercontent.com/yururu422/Wedding/main/' + path;
     });
   }
 
