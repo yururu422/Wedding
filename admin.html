@@ -300,13 +300,12 @@
       </div>
 
       <div class="card">
-        <div class="card-label">Notices</div>
-        <div class="card-title" style="margin-bottom:18px;">예식장 안내</div>
-        <div style="display:flex;flex-direction:column;gap:16px;" id="inf-notices">
-          <div><label class="field-lbl">안내 1 제목</label><input class="field-inp" id="inf-n1t" placeholder="NOTICE 01" style="width:100%;margin-bottom:6px;"><label class="field-lbl">안내 1 내용</label><textarea class="field-inp" id="inf-n1" rows="2" style="width:100%;resize:vertical;" placeholder="예) 식사 안내, 드레스코드 등"></textarea></div>
-          <div><label class="field-lbl">안내 2 제목</label><input class="field-inp" id="inf-n2t" placeholder="NOTICE 02" style="width:100%;margin-bottom:6px;"><label class="field-lbl">안내 2 내용</label><textarea class="field-inp" id="inf-n2" rows="2" style="width:100%;resize:vertical;" placeholder="예) 답례품, 사진 촬영 안내 등"></textarea></div>
-          <div><label class="field-lbl">안내 3 제목</label><input class="field-inp" id="inf-n3t" placeholder="NOTICE 03" style="width:100%;margin-bottom:6px;"><label class="field-lbl">안내 3 내용</label><textarea class="field-inp" id="inf-n3" rows="2" style="width:100%;resize:vertical;" placeholder="예) 기타 안내사항 등"></textarea></div>
+        <div class="card-head" style="margin-bottom:14px;">
+          <div><div class="card-label">Notices</div><div class="card-title">예식장 안내</div></div>
+          <button class="btn btn-light" onclick="addNotice()" style="font-size:13px;padding:8px 16px;">+ 항목 추가</button>
         </div>
+        <div style="display:flex;flex-direction:column;gap:16px;" id="inf-notices"></div>
+        <p style="font-size:12px;color:var(--muted);margin-top:10px;">항목이 없으면 청첩장에서 안내 섹션이 사라집니다.</p>
       </div>
 
       <div class="btn-row">
@@ -473,11 +472,7 @@ const DEFAULT_INFO = {
   subway:'1호선·2호선 신도림역 1번 출구, 도보 5분',
   bus:'신도림테크노마트 정류장 하차',
   parking:'건물 내 주차장 이용 가능 (2시간 무료)',
-  notices:[
-    {title:'NOTICE 01', text:'안내 1 내용을 여기에 입력해주세요.\n예) 식사 안내, 드레스코드 등'},
-    {title:'NOTICE 02', text:'안내 2 내용을 여기에 입력해주세요.\n예) 답례품, 사진 촬영 안내 등'},
-    {title:'NOTICE 03', text:'안내 3 내용을 여기에 입력해주세요.\n예) 기타 안내사항 등'},
-  ]
+  notices:[]
 };
 
 function getInfo(){ return JSON.parse(localStorage.getItem('wedding_info')||'null') || DEFAULT_INFO; }
@@ -499,9 +494,7 @@ function loadInfo(){
   document.getElementById('inf-subway').value  = d.subway;
   document.getElementById('inf-bus').value     = d.bus;
   document.getElementById('inf-parking').value = d.parking;
-  if(d.notices[0]){ document.getElementById('inf-n1t').value=d.notices[0].title; document.getElementById('inf-n1').value=d.notices[0].text; }
-  if(d.notices[1]){ document.getElementById('inf-n2t').value=d.notices[1].title; document.getElementById('inf-n2').value=d.notices[1].text; }
-  if(d.notices[2]){ document.getElementById('inf-n3t').value=d.notices[2].title; document.getElementById('inf-n3').value=d.notices[2].text; }
+  renderNoticeFields(d.notices || []);
 }
 
 function saveInfo(){
@@ -521,14 +514,39 @@ function saveInfo(){
     subway: document.getElementById('inf-subway').value.trim(),
     bus:    document.getElementById('inf-bus').value.trim(),
     parking:document.getElementById('inf-parking').value.trim(),
-    notices:[
-      {title:document.getElementById('inf-n1t').value.trim(), text:document.getElementById('inf-n1').value},
-      {title:document.getElementById('inf-n2t').value.trim(), text:document.getElementById('inf-n2').value},
-      {title:document.getElementById('inf-n3t').value.trim(), text:document.getElementById('inf-n3').value},
-    ]
+    notices: Array.from(document.querySelectorAll('#inf-notices .notice-row')).map(row=>({
+      title: row.querySelector('.n-title').value.trim(),
+      text:  row.querySelector('.n-text').value
+    })).filter(n=>n.title||n.text)
   };
   localStorage.setItem('wedding_info', JSON.stringify(d));
   toast('기본 정보가 저장되었습니다 ✦');
+}
+
+function renderNoticeFields(notices){
+  const container = document.getElementById('inf-notices');
+  container.innerHTML = '';
+  notices.forEach((n, i) => addNoticeRow(n.title, n.text, i+1));
+  if(!notices.length) addNoticeRow('','', 1);
+}
+function addNoticeRow(title='', text='', num){
+  const container = document.getElementById('inf-notices');
+  const idx = num || container.querySelectorAll('.notice-row').length + 1;
+  const div = document.createElement('div');
+  div.className = 'notice-row';
+  div.style.cssText = 'background:var(--bg);border-radius:12px;padding:14px;position:relative;';
+  div.innerHTML = `
+    <button onclick="this.closest('.notice-row').remove()" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;line-height:1;">✕</button>
+    <label class="field-lbl">안내 ${idx} 제목</label>
+    <input class="field-inp n-title" value="${esc(title)}" placeholder="NOTICE 0${idx}" style="width:100%;margin-bottom:8px;">
+    <label class="field-lbl">안내 ${idx} 내용</label>
+    <textarea class="field-inp n-text" rows="2" style="width:100%;resize:vertical;" placeholder="예) 식사 안내, 드레스코드 등">${esc(text)}</textarea>`;
+  container.appendChild(div);
+}
+function addNotice(){
+  const container = document.getElementById('inf-notices');
+  const num = container.querySelectorAll('.notice-row').length + 1;
+  addNoticeRow('', '', num);
 }
 
 function resetInfo(){

@@ -619,36 +619,9 @@ section.visible{opacity:1;transform:translateY(0);}
 
 <!-- ════════ 7. VENUE INFO ════════ -->
 <section id="venue">
-  <p class="sec-title">Venue</p>
+  <p class="sec-title">Notices</p>
   <h2 class="sec-title-kr">예식장 안내</h2>
-  <!-- TODO: 안내1.jpg / 안내2.jpg / 안내3.jpg 파일을 같은 폴더에 추가 -->
-  <!-- TODO: 아래 안내 텍스트를 실제 내용으로 교체 -->
-  <div class="venue-list">
-    <div class="venue-card">
-      <img class="venue-img" src="안내1.jpg" alt="안내 1"
-           onerror="this.outerHTML='<div class=\'venue-ph\'><span>🏛️</span><span>안내1.jpg</span></div>'">
-      <div class="venue-body">
-        <div class="venue-num">NOTICE 01</div>
-        <div class="venue-txt">안내 1 내용을 여기에 입력해주세요.<br>예) 식사 안내, 드레스코드 등</div>
-      </div>
-    </div>
-    <div class="venue-card">
-      <img class="venue-img" src="안내2.jpg" alt="안내 2"
-           onerror="this.outerHTML='<div class=\'venue-ph\'><span>🏛️</span><span>안내2.jpg</span></div>'">
-      <div class="venue-body">
-        <div class="venue-num">NOTICE 02</div>
-        <div class="venue-txt">안내 2 내용을 여기에 입력해주세요.<br>예) 답례품, 사진 촬영 안내 등</div>
-      </div>
-    </div>
-    <div class="venue-card">
-      <img class="venue-img" src="안내3.jpg" alt="안내 3"
-           onerror="this.outerHTML='<div class=\'venue-ph\'><span>🏛️</span><span>안내3.jpg</span></div>'">
-      <div class="venue-body">
-        <div class="venue-num">NOTICE 03</div>
-        <div class="venue-txt">안내 3 내용을 여기에 입력해주세요.<br>예) 기타 안내사항, 문의처 등</div>
-      </div>
-    </div>
-  </div>
+  <div class="venue-list" id="venue-notices"></div>
 </section>
 
 <div class="divider">✦</div>
@@ -1222,15 +1195,23 @@ const DEFAULT_ACCOUNT = {
   if(tItems[1]) tItems[1].innerHTML = `<b>버스</b><br>${esc(d.bus)}`;
   if(tItems[2]) tItems[2].innerHTML = `<b>주차</b><br>${esc(d.parking)}`;
 
-  // 예식장 안내
-  const vCards = document.querySelectorAll('.venue-card .venue-body');
-  d.notices.forEach((n,i)=>{
-    if(!vCards[i]) return;
-    const numEl = vCards[i].querySelector('.venue-num');
-    const txtEl = vCards[i].querySelector('.venue-txt');
-    if(numEl) numEl.textContent = n.title;
-    if(txtEl) txtEl.innerHTML   = n.text.replace(/\n/g,'<br>');
-  });
+  // 예식장 안내 동적 렌더링
+  const venueSection = document.getElementById('venue');
+  const venueDivider = venueSection ? venueSection.previousElementSibling : null;
+  const noticeList   = document.getElementById('venue-notices');
+  const notices = (d.notices||[]).filter(n=>n.title||n.text);
+  if(!notices.length){
+    if(venueSection) venueSection.style.display='none';
+    if(venueDivider && venueDivider.classList.contains('divider')) venueDivider.style.display='none';
+  } else {
+    noticeList.innerHTML = notices.map(n=>`
+      <div class="venue-card">
+        <div class="venue-body">
+          <div class="venue-num">${n.title||''}</div>
+          <div class="venue-txt">${(n.text||'').replace(/\n/g,'<br>')}</div>
+        </div>
+      </div>`).join('');
+  }
 
   // D-day 업데이트 (WEDDING 변수 재설정)
   window.WEDDING = wed;
