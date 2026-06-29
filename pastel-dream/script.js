@@ -664,6 +664,8 @@
       }
     );
 
+    window._scrollObserver = observer;
+
     // 초기 정적 항목 관찰
     $$('.animate-item').forEach((el) => observer.observe(el));
 
