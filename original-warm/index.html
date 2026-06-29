@@ -1075,6 +1075,9 @@ function loadHeroImg(input){
 
 // 히어로 이미지 자동 로드
 (function(){
+  // 관리자 페이지에서 선택한 표지 사진 (GitHub raw URL)
+  const adminHero = localStorage.getItem('hero_img_url');
+  if(adminHero){ showHeroImg(adminHero); return; }
   const saved = localStorage.getItem('hero_img');
   if(saved){ showHeroImg(saved); return; }
 

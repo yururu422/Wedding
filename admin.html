@@ -206,7 +206,13 @@
           </div>
         </div>
         <div id="gh-photo-grid" style="display:none;">
-          <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">✦ 사진을 클릭해서 선택/해제하세요</div>
+          <div style="font-size:12px;color:var(--accent);font-weight:500;margin-bottom:6px;">🌟 표지 사진 설정</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">사진을 길게 누르면(또는 ★ 클릭) 표지로 설정돼요</div>
+          <div id="gh-hero-preview" style="display:none;margin-bottom:14px;border-radius:12px;overflow:hidden;max-height:160px;position:relative;">
+            <img id="gh-hero-img" style="width:100%;object-fit:cover;max-height:160px;" alt="표지">
+            <div style="position:absolute;top:8px;left:8px;background:var(--accent);color:#fff;font-size:11px;padding:3px 10px;border-radius:50px;">현재 표지</div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">✦ 사진을 클릭해서 갤러리 선택/해제 · ★ 클릭해서 표지 설정</div>
           <div class="g-grid" id="gh-grid" style="grid-template-columns:repeat(4,1fr);"></div>
           <div class="btn-row" style="margin-top:14px;">
             <button class="btn btn-green" onclick="applyGithubSelection()">선택한 사진 갤러리에 적용</button>
@@ -532,16 +538,39 @@ async function loadGithubPhotos(){
 
 function renderGhGrid(){
   const el = document.getElementById('gh-grid');
-  el.innerHTML = ghPhotos.map(p => `
-    <div class="g-th${ghSelected.has(p.name)?' gh-sel':''}"
-         onclick="toggleGhPhoto('${p.name}')" style="cursor:pointer;">
+  const heroName = localStorage.getItem('hero_photo') || '';
+  el.innerHTML = ghPhotos.map(p => {
+    const isHero = p.name === heroName;
+    const isSel  = ghSelected.has(p.name);
+    return `
+    <div class="g-th${isSel?' gh-sel':''}" style="cursor:pointer;" onclick="toggleGhPhoto('${p.name}')">
       <img src="${p.raw_url}" alt="${p.name}"
            onerror="this.parentNode.style.background='#E8E0D5';this.remove()">
-      <div class="g-num">${ghSelected.has(p.name)?'✓':''}</div>
+      <div class="g-num">${isSel?'✓':''}</div>
+      <button onclick="event.stopPropagation();setHeroPhoto('${p.name}','${p.raw_url}')"
+        style="position:absolute;bottom:6px;right:6px;background:${isHero?'var(--accent)':'rgba(0,0,0,.45)'};
+        color:#fff;border:none;border-radius:50%;width:26px;height:26px;font-size:13px;cursor:pointer;
+        display:flex;align-items:center;justify-content:center;line-height:1;">★</button>
       <div style="position:absolute;inset:0;border-radius:12px;
-        border:${ghSelected.has(p.name)?'3px solid var(--accent)':'3px solid transparent'};
+        border:${isSel?'3px solid var(--accent)':'3px solid transparent'};
         transition:border .15s;pointer-events:none;"></div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
+
+  // 표지 미리보기 업데이트
+  const heroPhoto = ghPhotos.find(p => p.name === heroName);
+  const prev = document.getElementById('gh-hero-preview');
+  const prevImg = document.getElementById('gh-hero-img');
+  if(heroPhoto){ prev.style.display='block'; prevImg.src=heroPhoto.raw_url; }
+  else { prev.style.display='none'; }
+}
+
+function setHeroPhoto(name, rawUrl){
+  localStorage.setItem('hero_photo', name);
+  // original-warm 템플릿용 localStorage 저장
+  localStorage.setItem('hero_img_url', rawUrl);
+  renderGhGrid();
+  toast('표지 사진이 설정되었습니다 ★');
 }
 
 function toggleGhPhoto(name){
