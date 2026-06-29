@@ -554,15 +554,14 @@ function renderGhGrid(){
       <div class="g-num">${isSel?'✓':''}</div>
       <!-- 회전 버튼 -->
       <button onclick="event.stopPropagation();rotatePhoto('${p.name}',-90)"
-        style="position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,.55);color:#fff;border:none;
-        border-radius:50%;width:26px;height:26px;font-size:13px;cursor:pointer;line-height:26px;text-align:center;">↺</button>
+        style="position:absolute;bottom:6px;left:4px;z-index:10;background:rgba(0,0,0,.65);color:#fff;border:none;
+        border-radius:50%;width:26px;height:26px;font-size:13px;cursor:pointer;line-height:26px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.3);">↺</button>
       <button onclick="event.stopPropagation();rotatePhoto('${p.name}',90)"
-        style="position:absolute;bottom:6px;left:36px;background:rgba(0,0,0,.55);color:#fff;border:none;
-        border-radius:50%;width:26px;height:26px;font-size:13px;cursor:pointer;line-height:26px;text-align:center;">↻</button>
-      <!-- 표지 설정 버튼 -->
+        style="position:absolute;bottom:6px;left:34px;z-index:10;background:rgba(0,0,0,.65);color:#fff;border:none;
+        border-radius:50%;width:26px;height:26px;font-size:13px;cursor:pointer;line-height:26px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.3);">↻</button>
       <button onclick="event.stopPropagation();setHeroPhoto('${p.name}','${p.raw_url}')"
-        style="position:absolute;bottom:6px;right:6px;background:${isHero?'var(--accent)':'rgba(0,0,0,.45)'};
-        color:#fff;border:none;border-radius:50%;width:26px;height:26px;font-size:13px;cursor:pointer;line-height:26px;text-align:center;">★</button>
+        style="position:absolute;bottom:6px;right:4px;z-index:10;background:${isHero?'var(--accent)':'rgba(0,0,0,.45)'};
+        color:#fff;border:none;border-radius:50%;width:26px;height:26px;font-size:13px;cursor:pointer;line-height:26px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.3);">★</button>
       <div style="position:absolute;inset:0;border-radius:12px;
         border:${isSel?'3px solid var(--accent)':'3px solid transparent'};
         transition:border .15s;pointer-events:none;"></div>
@@ -642,9 +641,9 @@ function renderGallery(){
            onerror="this.parentNode.style.background='#E8E0D5';this.remove()">
       <div class="g-num">${i+1}</div>
       <button onclick="event.stopPropagation();deleteGalleryPhoto('${src.replace(/'/g,"\\'")}')"
-        style="position:absolute;top:6px;right:6px;background:rgba(196,126,126,.85);color:#fff;
-        border:none;border-radius:50%;width:22px;height:22px;font-size:11px;cursor:pointer;
-        line-height:22px;text-align:center;font-weight:bold;">✕</button>
+        style="position:absolute;top:6px;right:6px;z-index:10;background:rgba(196,126,126,.9);color:#fff;
+        border:none;border-radius:50%;width:26px;height:26px;font-size:13px;cursor:pointer;
+        line-height:26px;text-align:center;font-weight:bold;box-shadow:0 2px 6px rgba(0,0,0,.3);">✕</button>
     </div>`;
   }).join('');
 }
