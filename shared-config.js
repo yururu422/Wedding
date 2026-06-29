@@ -47,16 +47,30 @@
     }));
   }
 
-  /* ── 갤러리 사진 (GitHub raw URL) ── */
-  const gallery = JSON.parse(localStorage.getItem('gallery_order') || 'null');
+  /* ── 갤러리 사진 ── */
+  var GH_BASE = 'https://yururu422.github.io/Wedding/';
+  var GH_API  = 'https://api.github.com/repos/yururu422/Wedding/contents/photos';
+
+  function fixGalleryUrl(path) {
+    if (path.startsWith('http')) return path;
+    var name = decodeURIComponent(path.split('/').pop());
+    return GH_BASE + 'photos/' + encodeURIComponent(name);
+  }
+
+  var gallery = JSON.parse(localStorage.getItem('gallery_order') || 'null');
   if (gallery && gallery.length) {
-    var GH_BASE = 'https://yururu422.github.io/Wedding/';
-    window.__ADMIN_GALLERY = gallery.map(function (path) {
-      if (path.startsWith('http')) return path;
-      // 깨진 URL에서 파일명만 추출해 복구
-      var name = decodeURIComponent(path.split('/').pop());
-      return GH_BASE + 'photos/' + encodeURIComponent(name);
-    });
+    window.__ADMIN_GALLERY = gallery.map(fixGalleryUrl);
+  } else {
+    // localStorage 없으면 GitHub API에서 자동 로드
+    // Promise로 설정해도 템플릿이 Promise.resolve()로 감싸므로 그대로 작동
+    window.__ADMIN_GALLERY = fetch(GH_API)
+      .then(function(r){ return r.json(); })
+      .then(function(files){
+        return files
+          .filter(function(f){ return /\.(jpg|jpeg|png|gif|webp)$/i.test(f.name); })
+          .map(function(f){ return GH_BASE + 'photos/' + encodeURIComponent(f.name); });
+      })
+      .catch(function(){ return []; });
   }
 
   /* ── 표지 사진 ── */

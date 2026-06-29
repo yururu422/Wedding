@@ -804,50 +804,55 @@ setInterval(tick,1000); tick();
 })();
 
 /* ════════════════════════════════════════════
-   GALLERY — localStorage 순서 읽기
+   GALLERY
 ════════════════════════════════════════════ */
 (function(){
-  const DEFAULT_IMGS = [
-    '../모바일 청첩장 사진/갤러리 이미지 1.JPG',
-    '../모바일 청첩장 사진/갤러리 이미지 2.JPG',
-    '../모바일 청첩장 사진/갤러리 이미지 3.JPG',
-    '../모바일 청첩장 사진/갤러리 이미지 4.JPG',
-    '../모바일 청첩장 사진/갤러리 이미지 5.JPG',
-    '../모바일 청첩장 사진/갤러리 이미지 6.JPG',
-    '../모바일 청첩장 사진/갤러리 이미지 7.JPG',
-    '../모바일 청첩장 사진/갤러리 이미지 8.JPG',
-  ];
-  const GH_BASE = 'https://yururu422.github.io/Wedding/';
+  const GH_BASE   = 'https://yururu422.github.io/Wedding/';
+  const GH_API    = 'https://api.github.com/repos/yururu422/Wedding/contents/photos';
+  const track  = document.getElementById('g-track');
+  const dotsEl = document.getElementById('g-dots');
+
   function fixUrl(url) {
     if (url.startsWith('https://') || url.startsWith('http://')) return url;
-    // 깨진 URL(null/..., 상대경로)에서 파일명만 추출해 GitHub Pages URL로 복구
     const name = decodeURIComponent(url.split('/').pop());
     return GH_BASE + 'photos/' + encodeURIComponent(name);
   }
+
+  function renderGallery(imgs) {
+    const rots = JSON.parse(localStorage.getItem('photo_rotations')||'{}');
+    track.innerHTML = imgs.map((src,i) => {
+      const name = decodeURIComponent(src.split('/').pop().split('?')[0]);
+      const deg  = rots[name] || 0;
+      return `<div class="g-item"><img src="${src}" alt="갤러리 ${i+1}"
+        style="transform:rotate(${deg}deg)"
+        onerror="this.parentNode.innerHTML='<div class=\\'g-ph\\'><div class=\\'ico\\'>🖼️</div></div>'"></div>`;
+    }).join('');
+    dotsEl.innerHTML = imgs.map((_,i) =>
+      `<div class="g-dot${i===0?' on':''}"></div>`
+    ).join('');
+    const dots = dotsEl.querySelectorAll('.g-dot');
+    track.addEventListener('scroll',()=>{
+      const idx = Math.round(track.scrollLeft / (track.scrollWidth / imgs.length));
+      dots.forEach((d,i) => d.classList.toggle('on', i===idx));
+    });
+  }
+
   const saved = localStorage.getItem('gallery_order');
-  const imgs = (saved ? JSON.parse(saved) : DEFAULT_IMGS).map(fixUrl);
+  if (saved) {
+    const urls = JSON.parse(saved).map(fixUrl);
+    if (urls.length) { renderGallery(urls); return; }
+  }
 
-  const track = document.getElementById('g-track');
-  const dotsEl = document.getElementById('g-dots');
-
-  const rots = JSON.parse(localStorage.getItem('photo_rotations')||'{}');
-  track.innerHTML = imgs.map((src,i) => {
-    const name = src.split('/').pop();
-    const deg  = rots[name] || 0;
-    return `<div class="g-item"><img src="${src}" alt="갤러리 ${i+1}"
-      style="transform:rotate(${deg}deg)"
-      onerror="this.parentNode.innerHTML='<div class=\\'g-ph\\'><div class=\\'ico\\'>🖼️</div></div>'"></div>`;
-  }).join('');
-
-  dotsEl.innerHTML = imgs.map((_,i) =>
-    `<div class="g-dot${i===0?' on':''}"></div>`
-  ).join('');
-
-  const dots = dotsEl.querySelectorAll('.g-dot');
-  track.addEventListener('scroll',()=>{
-    const idx = Math.round(track.scrollLeft / (track.scrollWidth / imgs.length));
-    dots.forEach((d,i) => d.classList.toggle('on', i===idx));
-  });
+  // localStorage 없으면 GitHub API에서 자동 로드
+  fetch(GH_API)
+    .then(r => r.json())
+    .then(files => {
+      const urls = files
+        .filter(f => /\.(jpg|jpeg|png|gif|webp)$/i.test(f.name))
+        .map(f => GH_BASE + 'photos/' + encodeURIComponent(f.name));
+      renderGallery(urls.length ? urls : []);
+    })
+    .catch(() => renderGallery([]));
 })();
 
 /* ════════════════════════════════════════════
