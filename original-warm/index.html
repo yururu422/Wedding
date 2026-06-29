@@ -42,8 +42,10 @@ body{
   line-height:1.7;
   min-height:100vh;
 }
-img{display:block;max-width:100%;}
+img{display:block;max-width:100%;-webkit-user-select:none;user-select:none;pointer-events:none;}
 button,a{cursor:pointer;}
+/* 사진 저장/확대 방지 */
+img{-webkit-touch-callout:none;}
 
 /* ── 앱 래퍼 ── */
 #app{
@@ -1221,6 +1223,11 @@ const DEFAULT_ACCOUNT = {
 
 /* INIT */
 loadGb();
+
+/* 사진 저장/확대 차단 */
+document.addEventListener('contextmenu', e => { if(e.target.tagName==='IMG') e.preventDefault(); });
+document.addEventListener('dragstart',   e => { if(e.target.tagName==='IMG') e.preventDefault(); });
+document.addEventListener('selectstart', e => { if(e.target.tagName==='IMG') e.preventDefault(); });
 </script>
 </body>
 </html>
