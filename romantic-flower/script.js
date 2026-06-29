@@ -1,4 +1,4 @@
-/* ============================================
+﻿/* ============================================
    Romantic Flower - Mobile Wedding Invitation
    script.js
    ============================================ */
@@ -314,7 +314,7 @@
     // Show loading placeholder
     grid.innerHTML = '<div class="section-loading"><span class="section-loading__dot"></span><span class="section-loading__dot"></span><span class="section-loading__dot"></span></div>';
 
-    galleryImages = await loadImagesFromFolder('gallery');
+    galleryImages = await (window.__ADMIN_GALLERY ? Promise.resolve(window.__ADMIN_GALLERY) : loadImagesFromFolder('gallery'));
 
     if (galleryImages.length === 0) {
       // Hide entire gallery section if no images found
@@ -707,3 +707,4 @@
     init();
   }
 })();
+

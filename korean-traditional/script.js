@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Korean Traditional Wedding Invitation
  * 한국 전통 모바일 청첩장 - Script
  */
@@ -623,7 +623,7 @@
 
     const [storyImages, galleryImages] = await Promise.all([
       loadImagesFromFolder('story'),
-      loadImagesFromFolder('gallery')
+      (window.__ADMIN_GALLERY ? Promise.resolve(window.__ADMIN_GALLERY) : loadImagesFromFolder('gallery'))
     ]);
 
     initStory(storyImages);
@@ -636,3 +636,4 @@
     init();
   }
 })();
+

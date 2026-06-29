@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Pastel Dream Wedding Invitation
  * Korean Mobile 청첩장 - Script
  */
@@ -714,7 +714,7 @@
     // 스토리/갤러리 이미지 자동 감지
     const [storyImages, galleryImages] = await Promise.all([
       loadImagesFromFolder('story'),
-      loadImagesFromFolder('gallery')
+      (window.__ADMIN_GALLERY ? Promise.resolve(window.__ADMIN_GALLERY) : loadImagesFromFolder('gallery'))
     ]);
 
     // 감지된 이미지로 섹션 렌더링
@@ -733,3 +733,4 @@
     init();
   }
 })();
+

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Midnight Navy Wedding Invitation
  * Korean Mobile 청첩장 - Script
  */
@@ -671,7 +671,7 @@
     // Auto-detect story and gallery images in parallel
     const [storyImages, galleryImages] = await Promise.all([
       loadImagesFromFolder('story'),
-      loadImagesFromFolder('gallery')
+      (window.__ADMIN_GALLERY ? Promise.resolve(window.__ADMIN_GALLERY) : loadImagesFromFolder('gallery'))
     ]);
 
     // Render sections with discovered images
@@ -685,3 +685,4 @@
     init();
   }
 })();
+

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Modern Minimal Wedding Invitation - Script
  */
 
@@ -155,7 +155,7 @@
     // Load images asynchronously
     const [storyImages, galleryImages] = await Promise.all([
       loadImagesFromFolder('story'),
-      loadImagesFromFolder('gallery')
+      (window.__ADMIN_GALLERY ? Promise.resolve(window.__ADMIN_GALLERY) : loadImagesFromFolder('gallery'))
     ]);
 
     // Render image-dependent sections
@@ -601,3 +601,4 @@
     init();
   }
 })();
+

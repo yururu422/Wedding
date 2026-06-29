@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Simple & Clean Wedding Invitation
  * Korean Mobile 청첩장 - Script
  */
@@ -621,7 +621,7 @@
     // Auto-detect images in parallel
     const [storyImages, galleryImages] = await Promise.all([
       loadImagesFromFolder('story'),
-      loadImagesFromFolder('gallery')
+      (window.__ADMIN_GALLERY ? Promise.resolve(window.__ADMIN_GALLERY) : loadImagesFromFolder('gallery'))
     ]);
 
     initStory(storyImages);
@@ -634,3 +634,4 @@
     init();
   }
 })();
+
