@@ -84,5 +84,13 @@
   document.addEventListener('DOMContentLoaded', function () {
     rotObserver.observe(document.body, { childList: true, subtree: true });
     document.querySelectorAll('img').forEach(applyRotationToImg);
+
+    /* 사진 저장/확대 차단 */
+    var style = document.createElement('style');
+    style.textContent = 'img{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;pointer-events:none;}';
+    document.head.appendChild(style);
+    document.addEventListener('contextmenu', function(e){ if(e.target.tagName==='IMG') e.preventDefault(); });
+    document.addEventListener('dragstart',   function(e){ if(e.target.tagName==='IMG') e.preventDefault(); });
+    document.addEventListener('selectstart', function(e){ if(e.target.tagName==='IMG') e.preventDefault(); });
   });
 })();
