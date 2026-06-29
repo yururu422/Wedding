@@ -33,7 +33,7 @@
   if (gallery && gallery.length) {
     window.__ADMIN_GALLERY = gallery.map(function (path) {
       return path.startsWith('http') ? path
-        : 'https://raw.githubusercontent.com/yururu422/Wedding/main/' + path;
+        : 'https://yururu422.github.io/Wedding/' + path;
     });
   }
 
