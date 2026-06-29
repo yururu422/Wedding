@@ -630,14 +630,34 @@ let dragSrc = null;
 function renderGallery(){
   const grid = document.getElementById('g-grid');
   const order = getGallery();
-  grid.innerHTML = order.map((src,i)=>`
+  const rots  = getRotations();
+  grid.innerHTML = order.map((src,i)=>{
+    const name = src.split('/').pop();
+    const deg  = rots[name] || 0;
+    return `
     <div class="g-th" draggable="true" data-src="${src}"
          ondragstart="dStart(event)" ondragover="dOver(event)"
          ondrop="dDrop(event)" ondragend="dEnd(event)">
-      <img src="${src}" alt="${i+1}"
+      <img src="${src}" alt="${i+1}" style="transform:rotate(${deg}deg)"
            onerror="this.parentNode.style.background='#E8E0D5';this.remove()">
       <div class="g-num">${i+1}</div>
-    </div>`).join('');
+      <button onclick="event.stopPropagation();deleteGalleryPhoto('${src.replace(/'/g,"\\'")}')"
+        style="position:absolute;top:6px;right:6px;background:rgba(196,126,126,.85);color:#fff;
+        border:none;border-radius:50%;width:22px;height:22px;font-size:11px;cursor:pointer;
+        line-height:22px;text-align:center;font-weight:bold;">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function deleteGalleryPhoto(src){
+  const order = getGallery().filter(s => s !== src);
+  localStorage.setItem('gallery_order', JSON.stringify(order));
+  // gh-grid 선택 해제도
+  const name = src.split('/').pop();
+  ghSelected.delete(name);
+  renderGallery();
+  renderGhGrid();
+  toast('사진이 삭제되었습니다');
 }
 function dStart(e){ dragSrc=e.currentTarget; dragSrc.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
 function dOver(e){ e.preventDefault(); document.querySelectorAll('.g-th').forEach(t=>t.classList.remove('drag-over')); e.currentTarget.classList.add('drag-over'); }

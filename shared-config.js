@@ -39,4 +39,30 @@
   /* ── 표지 사진 ── */
   const heroUrl = localStorage.getItem('hero_img_url');
   if (heroUrl) window.__ADMIN_HERO = heroUrl;
+
+  /* ── 사진 회전 (MutationObserver로 모든 템플릿에 자동 적용) ── */
+  const rots = JSON.parse(localStorage.getItem('photo_rotations') || '{}');
+  window.__ADMIN_ROTATIONS = rots;
+
+  function applyRotationToImg(img) {
+    if (!img.src) return;
+    const name = decodeURIComponent(img.src.split('/').pop().split('?')[0]);
+    const deg = rots[name];
+    if (deg) img.style.transform = 'rotate(' + deg + 'deg)';
+  }
+
+  const rotObserver = new MutationObserver(function (mutations) {
+    mutations.forEach(function (m) {
+      m.addedNodes.forEach(function (node) {
+        if (node.nodeType !== 1) return;
+        if (node.tagName === 'IMG') applyRotationToImg(node);
+        node.querySelectorAll && node.querySelectorAll('img').forEach(applyRotationToImg);
+      });
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    rotObserver.observe(document.body, { childList: true, subtree: true });
+    document.querySelectorAll('img').forEach(applyRotationToImg);
+  });
 })();
