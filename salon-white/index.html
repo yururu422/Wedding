@@ -33,6 +33,56 @@ img{display:block;max-width:100%;-webkit-touch-callout:none;-webkit-user-select:
 button,a{cursor:pointer;}
 
 /* ══════════════════════
+   CURTAIN
+══════════════════════ */
+#curtain{
+  position:fixed;inset:0;z-index:10000;
+  background:linear-gradient(160deg,#F9F5EE 0%,#EDE3D0 100%);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .9s cubic-bezier(.77,0,.18,1);
+}
+#curtain.opening{transform:translateY(-100%);}
+.curtain-inner{text-align:center;padding:40px 32px;}
+.curtain-en{
+  font-family:var(--en);font-size:11px;letter-spacing:6px;
+  color:var(--accent);margin-bottom:28px;font-style:italic;
+  animation:curtain-fade 1.2s ease both;
+}
+.curtain-line{
+  width:1px;height:60px;background:var(--accent);opacity:.5;
+  margin:0 auto 28px;
+  animation:curtain-grow .8s .3s ease both;
+}
+@keyframes curtain-grow{from{height:0;opacity:0;}to{height:60px;opacity:.5;}}
+.curtain-names{
+  font-family:var(--serif);font-size:32px;font-weight:300;
+  color:var(--text);letter-spacing:8px;margin-bottom:12px;
+  animation:curtain-fade 1s .4s ease both;
+}
+.curtain-date{
+  font-family:var(--en);font-size:13px;letter-spacing:4px;
+  color:var(--muted);margin-bottom:32px;
+  animation:curtain-fade 1s .6s ease both;
+}
+.curtain-chrysanthemum{
+  font-size:28px;color:var(--accent);margin-bottom:40px;
+  animation:curtain-spin 1.5s .5s ease both;
+}
+@keyframes curtain-spin{from{opacity:0;transform:rotate(-90deg) scale(.5);}to{opacity:1;transform:rotate(0) scale(1);}}
+.curtain-btn{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 36px;background:transparent;
+  border:1px solid var(--accent);border-radius:50px;
+  color:var(--accent);font-size:14px;font-family:var(--sans);
+  cursor:pointer;margin:0 auto;
+  animation:curtain-fade 1s .9s ease both;
+  transition:all .25s;
+}
+.curtain-btn:hover,.curtain-btn:active{background:var(--accent);color:#fff;}
+.curtain-btn-icon{font-size:16px;}
+@keyframes curtain-fade{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+
+/* ══════════════════════
    CHRYSANTHEMUM DIVIDER
 ══════════════════════ */
 .divider{
@@ -359,6 +409,21 @@ footer .foot-date{font-family:var(--en);font-size:12px;letter-spacing:3px;font-s
 
 <canvas id="chrysanthemum-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9990;"></canvas>
 <div id="toast"></div>
+
+<!-- ════════ CURTAIN ════════ -->
+<div id="curtain">
+  <div class="curtain-inner">
+    <div class="curtain-en">WEDDING INVITATION</div>
+    <div class="curtain-line"></div>
+    <div class="curtain-names" id="curtain-names">신랑 · 신부</div>
+    <div class="curtain-date" id="curtain-date">2026 . 11 . 28</div>
+    <div class="curtain-chrysanthemum">✿</div>
+    <button class="curtain-btn" onclick="openCurtain()">
+      <span class="curtain-btn-icon">✉</span>
+      <span>초대장 열기</span>
+    </button>
+  </div>
+</div>
 
 <!-- ════════ 1. HERO ════════ -->
 <section id="hero">
@@ -933,7 +998,21 @@ function renderContact(){
   animate();
 })();
 
+/* ── 커튼 ── */
+function openCurtain(){
+  const c = document.getElementById('curtain');
+  c.classList.add('opening');
+  c.addEventListener('transitionend', ()=>{ c.style.display='none'; }, {once:true});
+}
+function initCurtain(){
+  const d = Object.assign({}, DEFAULT, JSON.parse(localStorage.getItem('wedding_info')||'{}'));
+  document.getElementById('curtain-names').textContent = d.groom + ' · ' + d.bride;
+  const [y,mo,dy] = (d.date||'2026-11-28').split('-').map(Number);
+  document.getElementById('curtain-date').textContent = `${y} . ${String(mo).padStart(2,'0')} . ${String(dy).padStart(2,'0')}`;
+}
+
 /* ── INIT ── */
+initCurtain();
 document.querySelector('#hero .fade').classList.add('show');
 applyInfo();
 loadGallery();
