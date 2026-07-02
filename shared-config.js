@@ -139,6 +139,31 @@
       }
     }, 0);
 
+    /* ── 음악 플레이어 ── */
+    var musicUrl = localStorage.getItem('music_url');
+    if (musicUrl) {
+      var audio = document.createElement('audio');
+      audio.id = 'bgm'; audio.loop = true; audio.preload = 'none';
+      audio.src = musicUrl;
+      document.body.appendChild(audio);
+
+      var mBtn = document.createElement('button');
+      mBtn.id = 'music-btn';
+      mBtn.textContent = '♪';
+      mBtn.style.cssText = 'position:fixed;bottom:84px;right:18px;z-index:9999;width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;background:rgba(100,100,100,.75);backdrop-filter:blur(8px);color:#fff;font-size:18px;box-shadow:0 2px 12px rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;';
+      document.body.appendChild(mBtn);
+
+      var _started = false;
+      function _startOnce(){ if(_started)return; _started=true; audio.play().catch(function(){}); }
+      document.addEventListener('touchstart', _startOnce, {once:true});
+      document.addEventListener('click',      _startOnce, {once:true});
+      mBtn.addEventListener('click', function(e){
+        e.stopPropagation();
+        if(audio.paused){ audio.play(); mBtn.textContent='♪'; }
+        else            { audio.pause(); mBtn.textContent='♩'; }
+      });
+    }
+
     /* 사진 저장/확대 차단 */
     var style = document.createElement('style');
     style.textContent = 'img{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;pointer-events:none;}';

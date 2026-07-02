@@ -416,6 +416,16 @@
         </div>
         <hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
         <div class="setting-row">
+          <div class="setting-lbl">🎵 배경음악 URL</div>
+          <input class="setting-inp" type="text" id="music-url-inp" placeholder="https://yururu422.github.io/Wedding/music/bgm.mp3">
+          <div class="btn-row" style="margin-top:10px;">
+            <button class="btn btn-dark" onclick="saveMusic()">음악 저장</button>
+            <button class="btn btn-light" onclick="removeMusic()">음악 제거</button>
+          </div>
+          <p style="font-size:11px;color:var(--muted);margin-top:8px;">mp3 파일을 GitHub Wedding/music/ 폴더에 올린 후 GitHub Pages URL을 입력하세요</p>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
+        <div class="setting-row">
           <div class="setting-lbl">데이터 초기화</div>
           <div class="btn-row">
             <button class="btn btn-red" onclick="clearRsvp()">RSVP 삭제</button>
@@ -627,6 +637,7 @@ function switchTab(name, btn){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
   btn.classList.add('on');
   document.getElementById('panel-'+name).classList.add('on');
+  if(name==='settings') loadMusicSetting();
 }
 
 /* ══════════════════════════════════════════
@@ -1027,6 +1038,23 @@ function renderGb(){
 }
 function delGb(i){ const l=getGb(); l.splice(i,1); localStorage.setItem('guestbook',JSON.stringify(l)); renderGb(); toast('삭제되었습니다'); }
 function clearGb(){ if(!confirm('방명록 전체를 삭제할까요?')) return; localStorage.removeItem('guestbook'); renderGb(); toast('전체 삭제됨'); }
+
+/* ── 음악 ── */
+function loadMusicSetting(){
+  const url = localStorage.getItem('music_url') || '';
+  document.getElementById('music-url-inp').value = url;
+}
+function saveMusic(){
+  const url = document.getElementById('music-url-inp').value.trim();
+  if(!url){ toast('URL을 입력해주세요'); return; }
+  localStorage.setItem('music_url', url);
+  toast('음악이 저장되었습니다 🎵');
+}
+function removeMusic(){
+  localStorage.removeItem('music_url');
+  document.getElementById('music-url-inp').value = '';
+  toast('음악이 제거되었습니다');
+}
 
 /* ══════════════════════════════════════════
    SETTINGS
