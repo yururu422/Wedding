@@ -124,15 +124,6 @@ section:nth-child(even){background:var(--bg2);}
   font-size:13.5px;color:var(--muted);line-height:2.2;
   white-space:pre-line;
 }
-#invitation .parents-wrap{
-  display:grid;grid-template-columns:1fr 1fr;gap:0;
-  margin-top:36px;border-top:1px solid var(--border);
-  padding-top:28px;text-align:center;
-}
-#invitation .parents-col{padding:0 12px;}
-#invitation .parents-col:first-child{border-right:1px solid var(--border);}
-#invitation .parents-role{font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:8px;font-family:var(--en);}
-#invitation .parents-name{font-size:13px;color:var(--muted);line-height:2;}
 
 /* ══════════════════════
    3. CALENDAR
@@ -318,6 +309,28 @@ textarea.gb-inp{resize:none;height:80px;}
 .gb-empty{text-align:center;color:var(--muted);font-size:13px;padding:32px;}
 
 /* ══════════════════════
+   CONTACT
+══════════════════════ */
+.contact-group{margin-bottom:20px;}
+.contact-group-title{font-size:11px;letter-spacing:3px;color:var(--accent);margin-bottom:12px;font-family:var(--en);}
+.contact-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;background:var(--bg2);border-radius:12px;
+  border:1px solid var(--border);margin-bottom:8px;
+}
+.contact-left{display:flex;flex-direction:column;gap:3px;}
+.contact-role{font-size:10px;color:var(--muted);letter-spacing:1px;}
+.contact-name{font-size:14px;color:var(--text);font-weight:500;}
+.contact-btns{display:flex;gap:6px;}
+.contact-btn{
+  width:34px;height:34px;border-radius:50%;border:1px solid var(--border);
+  background:var(--bg);font-size:15px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s;
+}
+.contact-btn:active{background:var(--accent-light);}
+
+/* ══════════════════════
    FOOTER
 ══════════════════════ */
 footer{
@@ -344,6 +357,7 @@ footer .foot-date{font-family:var(--en);font-size:12px;letter-spacing:3px;font-s
 </head>
 <body>
 
+<canvas id="chrysanthemum-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9990;"></canvas>
 <div id="toast"></div>
 
 <!-- ════════ 1. HERO ════════ -->
@@ -380,14 +394,6 @@ footer .foot-date{font-family:var(--en);font-size:12px;letter-spacing:3px;font-s
     <div class="sec-label" style="text-align:center;">Invitation</div>
     <div class="greeting-title" id="greeting-title">소중한 분들을 초대합니다</div>
     <div class="greeting-text" id="greeting-text"></div>
-    <div class="parents-wrap" id="parents-wrap">
-      <div class="parents-col" id="groom-parents">
-        <div class="parents-role">Groom</div>
-      </div>
-      <div class="parents-col" id="bride-parents">
-        <div class="parents-role">Bride</div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -434,6 +440,17 @@ footer .foot-date{font-family:var(--en);font-size:12px;letter-spacing:3px;font-s
       </div>
     </div>
     <div class="transport-list" id="transport-list"></div>
+  </div>
+</section>
+
+<div class="divider"><span>✿</span></div>
+
+<!-- ════════ 5-2. CONTACT ════════ -->
+<section id="contact">
+  <div class="fade">
+    <div class="sec-label">Contact</div>
+    <div class="sec-title">연락처</div>
+    <div id="contact-section"></div>
   </div>
 </section>
 
@@ -561,13 +578,6 @@ function applyInfo(){
   document.getElementById('venue-name').textContent  = (d.venue||'') + ' ' + (d.hall||'');
   document.getElementById('venue-addr').textContent  = d.address||'';
 
-  // 부모 정보
-  const gp = document.getElementById('groom-parents');
-  const bp = document.getElementById('bride-parents');
-  gp.innerHTML = `<div class="parents-role">Groom</div>
-    <div class="parents-name">${esc(d.groomFather)} · ${esc(d.groomMother)}<br><span style="color:var(--accent);font-size:12px;">의 아들 ${esc(d.groom)}</span></div>`;
-  bp.innerHTML = `<div class="parents-role">Bride</div>
-    <div class="parents-name">${esc(d.brideFather)} · ${esc(d.brideMother)}<br><span style="color:var(--accent);font-size:12px;">의 딸 ${esc(d.bride)}</span></div>`;
 
   // 날짜 파싱
   const [y,mo,dy] = (d.date||'2026-11-28').split('-').map(Number);
@@ -814,11 +824,121 @@ document.querySelectorAll('.fade').forEach(el=>observer.observe(el));
 document.addEventListener('contextmenu',e=>{if(e.target.tagName==='IMG')e.preventDefault();});
 document.addEventListener('dragstart',  e=>{if(e.target.tagName==='IMG')e.preventDefault();});
 
+/* ── 연락처 ── */
+function renderContact(){
+  const DEFAULT_CONTACT = {
+    groom:[
+      {relation:'신랑',name:'권용식',phone:'010-0000-0000'},
+      {relation:'신랑 아버지',name:'권순철',phone:'010-0000-0001'},
+      {relation:'신랑 어머니',name:'김정미',phone:'010-0000-0002'},
+    ],
+    bride:[
+      {relation:'신부',name:'이유리',phone:'010-0000-0003'},
+      {relation:'신부 아버지',name:'이충섭',phone:'010-0000-0004'},
+      {relation:'신부 어머니',name:'강랑',phone:'010-0000-0005'},
+    ]
+  };
+  const data = JSON.parse(localStorage.getItem('contact_info')||'null') || DEFAULT_CONTACT;
+  const info = JSON.parse(localStorage.getItem('wedding_info')||'null')||DEFAULT;
+  function groupHtml(list, title){
+    if(!list||!list.length) return '';
+    return `<div class="contact-group">
+      <div class="contact-group-title">${title}</div>
+      ${list.map(c=>`<div class="contact-item">
+        <div class="contact-left">
+          <div class="contact-role">${esc(c.relation||c.role||'')}</div>
+          <div class="contact-name">${esc(c.name)}</div>
+        </div>
+        <div class="contact-btns">
+          <button class="contact-btn" onclick="window.location.href='tel:${c.phone}'" title="전화">📞</button>
+          <button class="contact-btn" onclick="window.location.href='sms:${c.phone}'" title="문자">💬</button>
+        </div>
+      </div>`).join('')}
+    </div>`;
+  }
+  document.getElementById('contact-section').innerHTML =
+    groupHtml(data.groom, (info.groom||DEFAULT.groom)+' 측') +
+    groupHtml(data.bride, (info.bride||DEFAULT.bride)+' 측');
+}
+
+/* ── 국화 낙화 효과 ── */
+(function(){
+  const canvas = document.getElementById('chrysanthemum-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, petals = [];
+
+  function resize(){
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function drawChrysanthemum(ctx, x, y, r, rot, alpha){
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(x, y);
+    ctx.rotate(rot);
+    const petalCount = 8;
+    for(let i=0; i<petalCount; i++){
+      ctx.save();
+      ctx.rotate((Math.PI*2/petalCount)*i);
+      ctx.beginPath();
+      ctx.ellipse(0, -r*0.7, r*0.22, r*0.55, 0, 0, Math.PI*2);
+      ctx.fillStyle = i%2===0 ? '#C9A96E' : '#E8D5A8';
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.beginPath();
+    ctx.arc(0, 0, r*0.22, 0, Math.PI*2);
+    ctx.fillStyle = '#F5EDD8';
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function createPetal(){
+    const size = 7 + Math.random()*8;
+    return {
+      x: Math.random()*W,
+      y: -size*2,
+      r: size,
+      rot: Math.random()*Math.PI*2,
+      rotSpeed: (Math.random()-.5)*.04,
+      speedY: 0.5 + Math.random()*0.8,
+      speedX: (Math.random()-.5)*0.5,
+      alpha: 0.4 + Math.random()*0.4,
+      swing: Math.random()*Math.PI*2,
+      swingSpeed: 0.02 + Math.random()*0.02,
+    };
+  }
+
+  for(let i=0; i<18; i++){
+    const p = createPetal();
+    p.y = Math.random()*H;
+    petals.push(p);
+  }
+
+  function animate(){
+    ctx.clearRect(0,0,W,H);
+    petals.forEach((p,i)=>{
+      p.swing += p.swingSpeed;
+      p.x += Math.sin(p.swing)*0.6 + p.speedX;
+      p.y += p.speedY;
+      p.rot += p.rotSpeed;
+      if(p.y > H + p.r*2) petals[i] = createPetal();
+      drawChrysanthemum(ctx, p.x, p.y, p.r, p.rot, p.alpha);
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
 /* ── INIT ── */
 document.querySelector('#hero .fade').classList.add('show');
 applyInfo();
 loadGallery();
 renderAccounts();
+renderContact();
 renderGb();
 </script>
 </body>
