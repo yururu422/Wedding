@@ -9,18 +9,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
   <style>
 @font-face {
-  font-family: 'GangwonHyunok';
-  src: url('fonts/강원교육현옥샘.ttf') format('truetype');
-  font-weight: normal;
+  font-family: 'UhBee';
+  src: url('fonts/UhBee Se_hyun.ttf') format('truetype');
+  font-weight: 400;
 }
 @font-face {
-  font-family: 'GangwonModu';
-  src: url('fonts/강원교육모두 Light.ttf') format('truetype');
-  font-weight: 300;
-}
-@font-face {
-  font-family: 'GangwonModu';
-  src: url('fonts/강원교육모두 Bold.ttf') format('truetype');
+  font-family: 'UhBee';
+  src: url('fonts/UhBee Se_hyun Bold.ttf') format('truetype');
   font-weight: 700;
 }
 
@@ -40,8 +35,8 @@
   --muted:   #7A6E62;
   --border:  rgba(180,160,130,.2);
   --max-w:   480px;
-  --hand:    'GangwonHyunok', cursive;
-  --body:    'GangwonModu', sans-serif;
+  --hand:    'UhBee', cursive;
+  --body:    'UhBee', cursive;
   --eng:     'Cormorant Garamond', serif;
 }
 
@@ -152,36 +147,25 @@ section.visible{opacity:1;transform:translateY(0);}
   padding-bottom:72px;text-align:center;
 }
 
-/* 히어로 위 카드 느낌 태그 */
-.hero-tag-wrap{
-  position:absolute;top:0;left:0;right:0;bottom:0;
+/* 히어로 오버레이 */
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom, rgba(44,40,32,.0) 40%, rgba(44,40,32,.58) 100%);
   display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
-  padding-bottom:64px;pointer-events:none;
-}
-.hero-card-float{
-  background:rgba(255,253,249,.92);
-  backdrop-filter:blur(8px);
-  padding:22px 32px;
-  text-align:center;
-  position:relative;
-  transform:rotate(-1deg);
-  box-shadow:0 8px 32px rgba(44,40,32,.15);
-}
-.hero-card-washi{
-  position:absolute;top:-10px;left:50%;transform:translateX(-50%);
-  width:56px;height:18px;background:var(--pink);border-radius:2px;opacity:.8;
+  padding-bottom:80px;text-align:center;
 }
 .hero-eng{
   font-family:var(--eng);font-size:13px;font-weight:300;font-style:italic;
-  color:var(--muted);letter-spacing:2px;margin-bottom:6px;
+  color:rgba(255,253,249,.8);letter-spacing:3px;margin-bottom:8px;
 }
 .hero-names{
-  font-family:var(--hand);font-size:28px;
-  color:var(--text);margin-bottom:6px;letter-spacing:2px;
+  font-family:var(--hand);font-size:30px;
+  color:#FFFDF9;margin-bottom:8px;letter-spacing:3px;
+  text-shadow:0 2px 12px rgba(44,40,32,.3);
 }
 .hero-date-txt{
   font-family:var(--eng);font-size:11px;font-weight:300;
-  color:var(--muted);letter-spacing:4px;
+  color:rgba(255,253,249,.75);letter-spacing:5px;
 }
 
 .scroll-ind{
@@ -609,13 +593,10 @@ section.visible{opacity:1;transform:translateY(0);}
       <span id="hero-ph-msg">사진을 불러오는 중...</span>
     </div>
   </div>
-  <div class="hero-tag-wrap">
-    <div class="hero-card-float">
-      <div class="hero-card-washi"></div>
-      <div class="hero-eng">The Wedding of</div>
-      <div class="hero-names">권용식 · 이유리</div>
-      <div class="hero-date-txt">2026 · 11 · 28 · SAT</div>
-    </div>
+  <div class="hero-overlay">
+    <div class="hero-eng">The Wedding of</div>
+    <div class="hero-names">권용식 · 이유리</div>
+    <div class="hero-date-txt">2026 · 11 · 28 · SAT</div>
   </div>
   <div class="scroll-ind">
     <span>SCROLL</span>
