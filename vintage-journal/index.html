@@ -947,8 +947,6 @@ setInterval(tick,1000); tick();
 /* ── GALLERY — 폴라로이드 ── */
 (function(){
   const row = document.getElementById('polaroid-row');
-  const captions = ['우리의 봄','설레는 여름','함께한 가을','영원히'];
-
   function fixUrl(url){
     if(url.startsWith('http')) return url;
     const name = decodeURIComponent(url.split('/').pop());
@@ -961,14 +959,12 @@ setInterval(tick,1000); tick();
       return;
     }
     row.innerHTML = imgs.map((src,i) => {
-      const cap = captions[i % captions.length];
       return `<div class="polaroid">
         <div class="polaroid-clip"></div>
         <div class="polaroid-img">
           <img src="${src}" alt="갤러리 ${i+1}"
             onerror="this.parentNode.innerHTML='<div class=\\'ph\\'>🖼️</div>'">
         </div>
-        <div class="polaroid-caption">${cap}</div>
       </div>`;
     }).join('');
   }
